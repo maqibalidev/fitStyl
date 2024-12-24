@@ -1,0 +1,44 @@
+
+.custom-header .heading {
+    padding-left: 34px;
+  }
+  .custom-header .heading::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background-color: var(--primary-color);
+    height: 40px;
+    margin: auto;
+    border-radius: 5px;
+  }
+  .custom-header {
+    margin-top: 120px;
+    h3 {
+      font-size: 34px;
+      font-weight: 600;
+    }
+  }
+  .custom-header .header-body {
+    margin-top: 34px;
+  }
+  .custom-header .nav-btns .prev-btn,
+  .custom-header .nav-btns .next-btn {
+    background-color: rgb(236, 236, 236);
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    svg {
+      transition: all 0.2s ease;
+    }
+    &:hover {
+      background-color: var(--primary-color);
+      svg {
+        color: white;
+      }
+    }
+  }
+  

@@ -1,0 +1,29 @@
+:root{
+    --primary-color:orange;
+    --primary-dark-color:rgb(241, 157, 0);
+    --light-grey-color:rgb(196, 196, 196);
+    --green-color:rgb(71, 196, 71);
+}
+.custom-container{
+    max-width: 1080px;
+    width: 90%;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+.color-primary{
+    color: var(--primary-color);
+}
+.color-lightgrey{
+    color: rgb(107, 107, 107);
+}
+.bg-color-lightgrey{
+background-color: rgb(243, 243, 243);
+}
+.color-green{
+    color: rgb(15, 221, 15);
+}
+.bg-color-black{
+    background-color: black;
+}

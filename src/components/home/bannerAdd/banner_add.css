@@ -1,0 +1,21 @@
+.banner-add-container{
+   height: 70vh;
+    max-height: 450px;
+    margin-top: 100px;
+    background-color: black;    
+}
+.banner-add-container .left{
+padding: 60px 0 60px 60px;
+.text-sec .large-heading{
+    font-size: 46px;
+}
+.text-sec .desc{
+color: rgb(209, 209, 209);
+}
+}
+.banner-add-container .right{
+    background: radial-gradient(circle 350px,rgba(255, 255, 255, 0.24),rgb(0, 0, 0));
+    img{
+        max-height: 350px;      
+    }
+}

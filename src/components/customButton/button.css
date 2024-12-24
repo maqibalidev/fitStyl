@@ -1,0 +1,9 @@
+.custom-btn{
+    padding: 14px 45px;
+background-color: var(--primary-color);
+color: white;
+width: fit-content;
+}
+.custom-btn-green{
+    background-color:var(--green-color) ;
+}
