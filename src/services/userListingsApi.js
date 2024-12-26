@@ -8,7 +8,7 @@ const API = axios.create({
 const authHeader = (token, addContentType = false) => {
   return addContentType
     ? {
-        "Content-Type": "multipart/form-data",
+       "Content-Type": "multipart/form-data",
         Authorization: `bearer ${token}`,
       }
     : { Authorization: `bearer ${token}` };
@@ -26,6 +26,7 @@ export const registerApi = async (values) => {
 export const uploadExcel = async (values, token) => {
   return await API.post("user/upload", values, authHeader(token, true));
 };
+
 // export const logoutApi = async(token) => {
 //   return API.post(
 //     "logout",

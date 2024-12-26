@@ -1,0 +1,37 @@
+@media (min-width: 576px) {
+    .hero-sec-slider-img , .banner-add-img{
+      position: static !important;
+    }
+  }
+  @media (max-width:576px) {
+    .banner-add-container , .new-arrival-outer-container{width: 100%;}
+    .banner-add-container .right{
+      &::after{
+  right: 0;
+  left: 0;
+  width: 100% !important;
+  margin: auto;
+  
+      }
+  }
+  .custom-header .nav-btns{
+    display: none !important;
+  }
+  }
+@media (max-width:576px) , (max-width:767px)  {
+    .new-arrival-item{
+        min-height: 300px;
+    }
+    .new-arrival-container{
+        height: fit-content !important;
+        max-height: fit-content !important;
+        .new-arrival-bottom{
+            padding: clamp(20px ,2vw,30px);
+           width:80%;
+        }
+    }
+    .new-arrival-item .image-right{
+    left: 0;
+margin: auto;
+    }
+}  

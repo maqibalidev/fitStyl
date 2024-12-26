@@ -1,21 +1,30 @@
-.banner-add-container{
-   height: 70vh;
-    max-height: 450px;
-    margin-top: 100px;
-    background-color: black;    
+.banner-add-container {
+  height: clamp(300px, 40vw, 400px);
+  margin-top: 100px;
 }
-.banner-add-container .left{
-padding: 60px 0 60px 60px;
-.text-sec .large-heading{
-    font-size: 46px;
+.banner-add-container .left {
+  padding: clamp(30px, 5vw, 50px) 0 clamp(30px, 5vw, 50px)
+    clamp(30px, 5vw, 50px);
+  .text-sec .large-heading {
+    font-size: clamp(24px, 3vw, 46px);
+  }
+  .text-sec .desc {
+    color: rgb(209, 209, 209);
+  }
 }
-.text-sec .desc{
-color: rgb(209, 209, 209);
-}
-}
-.banner-add-container .right{
-    background: radial-gradient(circle 350px,rgba(255, 255, 255, 0.24),rgb(0, 0, 0));
-    img{
-        max-height: 350px;      
-    }
+.banner-add-container .right {
+  img {
+    max-height: clamp(200px, 30vw, 300px);
+    min-width: 200px;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 60%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle clamp(200px, 30vw, 300px),rgba(255, 255, 255, 0.24),#0e0e0e);
+  }
 }

@@ -26,18 +26,43 @@ const Header = () => {
     },
   ];
   return (
-    <nav class="navbar navbar-expand-lg py-4 border border-bottom-3 border-muted">
-      <div class="container-fluid custom-container px-0">
+    <nav className="navbar navbar-expand-lg py-4 border border-bottom-3 border-muted">
+      <div className="container-fluid custom-container px-0">
 {/* ///////  LOGO /////// */}
 
-        <Link class="navbar-brand" to="#">
+        <Link className="navbar-brand" to="#">
           Navbar
         </Link>
 
 {/* //// HEADER MENU ICON BUTTON //// */}
 
-        <button
-          class="navbar-toggler"
+<div className="d-flex gap-3">
+<div className="header-right gap-4 align-items-center d-flex d-lg-none">
+            <div className="d-flex bg-light rounded-1 px-2 py-2 rounded-circle">
+              <button className="bg-transparent border-0 d-flex align-items-center px-0">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  className="bi bi-search"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                </svg>
+              </button>
+            </div>
+
+            <Link className="text-dark">
+              <FavoriteIcon />
+            </Link>
+
+            <Link className="text-dark">
+              <CartIcon />
+            </Link>
+          </div>
+         <button
+          className="navbar-toggler border-0 shadow-none px-0"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
@@ -45,16 +70,19 @@ const Header = () => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
+</div>
+
+ 
 {/* //////////////////////----------HEADER LINKS--------- ////////////////////////////// */}
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-auto gap-4">
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0 mx-auto gap-4 mt-2 mt-lg-0">
             {navLinks.map((item, key) => (
-              <li key={key} class="nav-item header-links mx-2">
+              <li key={key} className="nav-item header-links mx-2">
                 <Link
-                  class={`nav-link header-link ${
+                  className={`nav-link header-link ${
                     item.active ? "active position-relative" : ""
                   } p-0`}
                   aria-current="page"
@@ -68,10 +96,10 @@ const Header = () => {
 
 {/* //////////////////////----------HEADER LEFT--------- ////////////////////////////// */}
 
-          <div className="header-right d-flex gap-4 align-items-center">
-            <form class="d-flex bg-light rounded-1 px-2 ">
+          <div className="header-right gap-4 align-items-center d-none d-lg-flex">
+            <form className="d-flex bg-light rounded-1 px-2 ">
               <input
-                class="header-search-input form-control py-2 me-2 outline-none shadow-none border-0 bg-transparent"
+                className="header-search-input form-control py-2 me-2 outline-none shadow-none border-0 bg-transparent"
                 placeholder="What are you looking for?"
                 aria-label="Search"
               />
@@ -81,7 +109,7 @@ const Header = () => {
                   width="20"
                   height="20"
                   fill="currentColor"
-                  class="bi bi-search"
+                  className="bi bi-search"
                   viewBox="0 0 16 16"
                 >
                   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />

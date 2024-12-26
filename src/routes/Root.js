@@ -14,33 +14,40 @@ export const Root = () => {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
 
-//   useEffect(() => {
-// const checkAuth=()=>{
-//     const { authToken } = authContext?.data;
-//    if (authToken) {
-//    try {
-//       // ////////////////// IF TOKEN FOUND ,CHECK FOR THE EXPIRY   ////////////////////
-//     const token = jwtDecode(authToken);
-//     if (Date.now() / 1000 < token.exp) {
-//       if (location.pathname === "/login" || location.pathname === "/register") {
-//         navigate("/");
-//       }
-//     } else {
-//       // /////////////////// logout USER ON TOKEN EXPIRY  ///////////////////////////
-//     authContext.dispatch({type:'LOGOUT'})
-//     }
-//    } catch (error) {
-//     console.error("Invalid token: ", error);
-//     authContext.dispatch({type:'LOGOUT'})
-//    }}
-//     // /////////////////// NAVIGATE TO INDEX ROUTE IF  authToken IS undefined  ///////////////////////////
-//     else if (location.pathname !== "/login" && location.pathname !== "/register") {
-//       navigate("/login");
-//     }
-// }
-//    checkAuth();
-//    // eslint-disable-next-line
-//   }, [authContext?.data, navigate, location]);
+  // useEffect(() => {
+  //   const checkAuth = () => {
+  //     const { authToken } = authContext?.data;
+  //     if (authToken) {
+  //       try {
+  //         // ////////////////// IF TOKEN FOUND ,CHECK FOR THE EXPIRY   ////////////////////
+  //         const token = jwtDecode(authToken);
+  //         if (Date.now() / 1000 < token.exp) {
+  //           if (
+  //             location.pathname === "/login" ||
+  //             location.pathname === "/register"
+  //           ) {
+  //             navigate("/");
+  //           }
+  //         } else {
+  //           // /////////////////// logout USER ON TOKEN EXPIRY  ///////////////////////////
+  //           authContext.dispatch({ type: "LOGOUT" });
+  //         }
+  //       } catch (error) {
+  //         console.error("Invalid token: ", error);
+  //         authContext.dispatch({ type: "LOGOUT" });
+  //       }
+  //     }
+  //     // /////////////////// NAVIGATE TO INDEX ROUTE IF  authToken IS undefined  ///////////////////////////
+  //     else if (
+  //       location.pathname !== "/login" &&
+  //       location.pathname !== "/register"
+  //     ) {
+  //       navigate("/login");
+  //     }
+  //   };
+  //   checkAuth();
+  //   // eslint-disable-next-line
+  // }, [authContext?.data, navigate, location]);
 
   return (
     <Suspense
@@ -54,7 +61,7 @@ export const Root = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFoundPage/>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );

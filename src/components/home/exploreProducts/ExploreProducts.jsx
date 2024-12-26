@@ -1,21 +1,21 @@
 import React from 'react';
 import "./explore_products.css";
 import CustomHeader from '../../customHeader/CustomHeader';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import Product from '../../product/Product';
-import demo1 from "../../../assets/images/demo1.png"
-import { Navigation } from 'swiper/modules';
 import CustomButton from '../../customButton/CustomButton';
+import { productData } from '../../../assets/data';
 const ExploreProducts = () => {
   return (
     <div className='custom-container mx-auto'>
       <CustomHeader smallHeading="Our Products" largeHeading="Explore Our Products"/>
       
- <div className='product-container row gx-4 gy-5'>
+ <div className='product-container row gx-0 gx-sm-4 gy-5'>
 {
-  [...Array(8)].map((item,key)=>(
+  productData.exploreProductsData.map((item,key)=>(
 
-    <div className='col-3'><Product key={key} img={demo1} isNew={true}/>
+    <div key={key} className='col-12 col-sm-4 col-lg-3'>
+                    <Product key={key} img={item.img} offSale={item.sale} price={item.price} isNew={true} title={item.name}/>
+
 </div>
   ))
 }

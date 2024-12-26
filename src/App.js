@@ -10,6 +10,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/cartContext";
 import "./App.css";
+import "./assets/css/responsive.css"
 function App() {
   const router = createBrowserRouter([{ path: "*", element: <Root /> }]);
   return (

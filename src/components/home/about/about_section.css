@@ -1,0 +1,8 @@
+.about-item .icon{
+   outline: 10px solid rgba(250, 187, 71, 0.781); 
+   padding: 10px;
+}
+.about-sec-container{
+    gap: clamp(30px ,5vw,100px);
+    margin-top: clamp(50px,10vw,150px);
+}

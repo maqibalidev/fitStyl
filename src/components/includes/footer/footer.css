@@ -1,0 +1,19 @@
+.footer-container {
+  a {
+    font-size: 14px;
+    color: rgb(219, 219, 219);
+    transition: all 0.2s ease;
+    &:hover {
+      color: rgb(255, 255, 255);
+    }
+  }
+  form input::placeholder {
+    color: rgb(105, 105, 105);
+  }
+  .footer-icons {
+    svg {
+      height: 24px;
+      width: 24px;
+    }
+  }
+}

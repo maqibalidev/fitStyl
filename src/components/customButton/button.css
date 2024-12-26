@@ -1,8 +1,9 @@
 .custom-btn{
-    padding: 14px 45px;
+    padding: clamp(8px,2vw,14px) clamp(15px,5.5vw,45px);
 background-color: var(--primary-color);
 color: white;
 width: fit-content;
+font-size: clamp(12px,1vw,16px);
 }
 .custom-btn-green{
     background-color:var(--green-color) ;

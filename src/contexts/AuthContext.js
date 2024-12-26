@@ -5,7 +5,7 @@ const initialState = JSON.parse(localStorage.getItem("user")) || {
   name: null,
   email: null,
   authToken: null,
-  darkMode: true,
+  darkMode: false,
 };
 
 const authReducer = (state, action) => {
@@ -32,10 +32,8 @@ const authReducer = (state, action) => {
 };
 
 export const AuthContext = createContext();
-
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-
   return (
     <AuthContext.Provider value={{ data: state, dispatch }}>
       {children}

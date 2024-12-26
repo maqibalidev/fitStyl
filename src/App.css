@@ -6,7 +6,7 @@
 }
 .custom-container{
     max-width: 1080px;
-    width: 90%;
+    width: 95%;
 }
 a{
     text-decoration: none;
@@ -18,12 +18,45 @@ a{
 .color-lightgrey{
     color: rgb(107, 107, 107);
 }
+.color-light{
+    color: rgb(255, 255, 255);
+}
+.color-dark{
+    color: rgb(0, 0, 0);
+}
 .bg-color-lightgrey{
 background-color: rgb(243, 243, 243);
 }
+.bg-color-orange{
+    background-color:var(--primary-color);
+    }
 .color-green{
     color: rgb(15, 221, 15);
 }
-.bg-color-black{
-    background-color: black;
+.bg-color-green{
+    background-color:var(--green-color);
 }
+.bg-color-black{
+    background-color: #0e0e0e;
+}
+.bg-color-orange{
+    background-color: var(--primary-color);
+}
+.bg-color-dark-orange{
+    background-color: var(--primary-dark-color);
+}
+.bg-color-light{
+    background-color: white;
+}
+.my-bullet ,  .flash_sales_bullet {
+    width: 12px !important;
+    height: 12px !important;
+    background-color: #ccc !important;
+    border-radius: 50% !important;
+    margin: 0 5px !important;
+    display: inline-block !important;
+    cursor: pointer !important;
+  }
+  .my-bullet-active ,  .flash_sales_bullet-active{
+    background-color: var(--primary-color) !important;
+  }

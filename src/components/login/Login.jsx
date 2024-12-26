@@ -45,7 +45,6 @@ const Login = () => {
         })
     },
   });
-
   return (
     <div>
       {isLoading && <Loader />}
@@ -71,7 +70,6 @@ const Login = () => {
           handleTouched={formik.touched.password}
           handleErrors={formik.errors.password}
         />
-
         <button type="submit" className="btn btn-danger w-100">
           Login
         </button>

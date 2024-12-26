@@ -16,4 +16,5 @@
 }
 .header-link{
     color: rgb(126, 126, 126);
+    width: fit-content;
 }

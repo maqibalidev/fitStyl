@@ -6,11 +6,11 @@ const CustomHeader = ({smallHeading,largeHeading,navBtnClass,showNav=false,showB
   return (
      <div className="custom-header">
             <h6 className="heading position-relative color-primary">{smallHeading}</h6>
-            <div className="header-body d-flex justify-content-between">
-              <h3>{largeHeading}</h3>
+            <div className="header-body d-flex justify-content-between align-items-center flex-wrap">
+              <h3 className='large-heading mb-2 flex-grow-1'>{largeHeading}</h3>
              {
               showNav && (
-                <div className="nav-btns d-flex gap-3">
+                <div className="nav-btns d-flex gap-2 gap-sm-3 flex-grow-1 justify-content-end">
                 <div className={`prev-btn p-2 ${navBtnClass}-prev rounded-circle d-flex align-items-center justify-content-center`}>
                   <ArrowLEFT />
                 </div>
@@ -23,7 +23,7 @@ const CustomHeader = ({smallHeading,largeHeading,navBtnClass,showNav=false,showB
 
              {
               showBtn && (
-                <CustomButton text="View All"/>
+              <div className='d-flex justify-content-end flex-grow-1'>  <CustomButton text="View All"/></div>
               )
              }
 

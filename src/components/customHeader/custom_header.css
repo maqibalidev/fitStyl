@@ -2,6 +2,9 @@
 .custom-header .heading {
     padding-left: 34px;
   }
+  .custom-header .large-heading{
+    font-size: clamp(20px,2vw,34px);
+  }
   .custom-header .heading::before {
     content: "";
     position: absolute;
@@ -15,7 +18,7 @@
     border-radius: 5px;
   }
   .custom-header {
-    margin-top: 120px;
+    margin-top: clamp(50px,5vw,120px);
     h3 {
       font-size: 34px;
       font-weight: 600;
@@ -27,8 +30,8 @@
   .custom-header .nav-btns .prev-btn,
   .custom-header .nav-btns .next-btn {
     background-color: rgb(236, 236, 236);
-    width: 40px;
-    height: 40px;
+    width: clamp(34px,5vw,40px);
+    height: clamp(34px,5vw,40px);;
     cursor: pointer;
     transition: all 0.2s ease;
     svg {
@@ -40,5 +43,10 @@
         color: white;
       }
     }
+  }
+  .swiper-button-disabled {
+    opacity: 0.5; /* Make the button semi-transparent */
+    cursor: not-allowed; /* Show a 'not-allowed' cursor */
+    pointer-events: none;
   }
   
