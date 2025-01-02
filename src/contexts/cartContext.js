@@ -2,7 +2,7 @@ import { createContext, useReducer } from "react";
 const cartReducer = (state, action) => {
   switch (action.type) {
     case "ADD_PRODUCT":
-      const updatedCart = [...state, action.payload.product];
+      const updatedCart = [...state,{id: action.payload.id,quantity:1}];
       localStorage.setItem("cartData", JSON.stringify(updatedCart));
       return updatedCart;
 
@@ -38,8 +38,8 @@ export const CartProvider = ({ children }) => {
 );
 
 
-  const addProduct = (product) =>
-    dispatch({ type: "ADD_PRODUCT", payload: { product } });
+  const addProduct = (id) =>
+    dispatch({ type: "ADD_PRODUCT", payload: { id } });
   const removeProduct = (id) =>
     dispatch({ type: "REMOVE_PRODUCT", payload: { id } });
   const updateProduct = (id, quantity) =>

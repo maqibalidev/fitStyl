@@ -9,16 +9,24 @@ import { Root } from "./routes/Root";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/cartContext";
+import { FavoriteProvider } from "./contexts/favoritesContext";
 import "./App.css";
-import "./assets/css/responsive.css"
+import "./assets/css/responsive.css";
+import { SkeletonTheme } from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css'
 function App() {
   const router = createBrowserRouter([{ path: "*", element: <Root /> }]);
   return (
+    
     <AuthProvider>
+      <FavoriteProvider>
       <CartProvider>
         <ToastContainer autoClose={2000} toastClassName="toast-class" />
+        <SkeletonTheme baseColor="#d2d2d2" highlightColor="#e5e5e5">
         <RouterProvider router={router} />
+        </SkeletonTheme>
       </CartProvider>
+      </FavoriteProvider>
     </AuthProvider>
   );
 }

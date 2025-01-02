@@ -4,11 +4,16 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 // import logout from "./logout";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "../contexts/AuthContext";
+import Home from "../components/home/Home";
+import { About,Cart,Contact,Loader } from "../components/includes/imports";
 const HomePage = lazy(() => import("../components/home/Home"));
 const Register = lazy(() => import("../components/register/Register"));
 const Login = lazy(() => import("../components/login/Login"));
-const NotFoundPage = lazy(() => import("../components/NotFoundPage"));
+const Favorites = lazy(() => import("../components/favorites/Favorites"));
+const Products = lazy(() => import("../components/products/Products"));
 
+const ProductDetails = lazy(() => import("../components/productDetails/ProductDetails"));
+const NotFoundPage = lazy(() => import("../components/NotFoundPage"));
 export const Root = () => {
   const location = useLocation();
   const authContext = useContext(AuthContext);
@@ -52,15 +57,18 @@ export const Root = () => {
   return (
     <Suspense
       fallback={
-        <div className="d-flex justify-content-center align-items-center vh-100">
-          <div className="spinner-border text-success "></div>
-        </div>
-      }
-    >
+       <Loader/>
+      }>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/signup" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/favorites" element={<Favorites/>} />
+        <Route path="/products" element={<Products/>} />
+        <Route path="/product?" element={<ProductDetails/>} />
+        <Route path="/contact" element={<Contact/>} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>

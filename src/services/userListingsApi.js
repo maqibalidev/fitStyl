@@ -11,7 +11,7 @@ const authHeader = (token, addContentType = false) => {
        "Content-Type": "multipart/form-data",
         Authorization: `bearer ${token}`,
       }
-    : { Authorization: `bearer ${token}` };
+    : { Authorization: `bearer ${token}`};
 };
 
 export const loginApi = async (values) => {

@@ -13,16 +13,11 @@ export const loginSchema = Yup.object({
     .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
     .matches(/[a-z]/, "Password must contain at least one lowercase letter")
     .matches(/\d/, "Password must contain at least one digit")
-    .matches(
-      /[!@#$%^&*(),.?":{}|<>]/,
-      "Password must contain at least one special character"
-    )
+    .matches(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character")
     .required("Password is required"),
 });
 
-
-
- export const stdRecSchema = Yup.object({
+export const stdRecSchema = Yup.object({
     name: Yup.string().required("Please enter name!"),
     email: Yup.string()
       .required("Please enter email!")
@@ -40,8 +35,7 @@ export const loginSchema = Yup.object({
         "Please upload a valid Excel file (.xlsx or .xls)",
         (file) =>
           file &&
-          (file.type ===
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+          (file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
             file.type === "application/vnd.ms-excel")
       ),
   });

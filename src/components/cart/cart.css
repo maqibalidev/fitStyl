@@ -1,0 +1,62 @@
+.cart-item-checkbox{
+    height: 20px;
+    width: 20px;
+    accent-color: rgb(0, 0, 0); 
+}
+.cart-availability-btn{
+    font-size: 12px;
+}
+.cart-item-img{
+    object-fit: contain;
+}
+
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+/* For Firefox */
+input[type="number"] {
+  -moz-appearance: textfield; 
+}
+
+.my-confirm-button {
+    background-color:var(--primary-color);
+    width: 12em;
+}
+.my-cancel-button{
+  background-color: rgb(207, 207, 207);
+  width: 12em;
+}
+
+div:where(.swal2-container) div:where(.swal2-popup) {
+  display: none;
+  position: relative;
+  box-sizing: border-box;
+  grid-template-columns: minmax(0, 100%);
+  width: 32em;
+  max-width: 100%;
+  padding: 0 0 1.25em;
+  border: none;
+  border-radius: 10px !important;
+  background: rgba(92, 60, 0, 0.438) !important;
+  backdrop-filter: blur(10px); /* Adjust blur value */
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
+  color: hsl(0, 0%, 100%) !important;
+  font-family: inherit;
+  font-size: 1rem;
+}
+.swal2-success-circular-line-left , .swal2-success-circular-line-right, .swal2-success-fix{
+   background-color: transparent !important;
+}
+div:where(.swal2-icon).swal2-warning {
+  border-color: rgb(246 246 246) !important;
+  color: #fefefe !important;
+}
+.swal-title-class{
+  font-size: 18px !important;
+}
+.swal-desc-class{
+  font-size: 14px !important;
+}

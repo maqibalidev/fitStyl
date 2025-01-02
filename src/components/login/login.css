@@ -1,0 +1,24 @@
+.login-form{
+width: clamp(50%,6vw,100%);
+min-height: 100vh;
+height: fit-content;
+    input::placeholder{
+        color: rgb(172, 172, 172);
+    }
+}
+.login-left img{
+width: 100%;
+height: 100%;
+object-fit: cover;
+max-height: 100vh;
+}
+
+.form-bottom-redirect-link::after{
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: rgb(99, 99, 99);
+}

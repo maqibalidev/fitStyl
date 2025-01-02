@@ -82,32 +82,54 @@ export const data = [
 export const productData = {
   flashData: [
     {
+      id:1,
       name: "HAVIT HV-G92 Gamepad",
       price: 160,
       sale: 10,
       rating: 50,
-      img: require("./images/g92-2-500x500 1.png"),
+      // img: require("./images/g92-2-500x500 1.png"),//
+       img:"https://e7.pngegg.com/pngimages/1023/241/png-clipart-several-button-up-shirts-clothing-t-shirt-sleeve-blouse-folding-clothes-tshirt-baby-clothes.png",
+availability_status:0
     },
+    
     {
+      id:2,
       name: "AK-900 Wired Keyboard",
       price: 1160,
       sale: 35,
       rating: 80,
-      img: require("./images/ak-900-01-500x500 1.png"),
+      // img: require("./images/ak-900-01-500x500 1.png"),
+      img:"https://e7.pngegg.com/pngimages/562/852/png-clipart-hoodie-t-shirt-clothing-bluza-sweater-t-shirt-black-top.png",
+      availability_status:1
     },
     {
+      id:3,
       name: "S-Series Comfort Chair",
       price: 400,
       sale: 25,
       rating: 80,
-      img: require("./images/sam-moghadam-khamseh-kvmdsTrGOBM-unsplash 1.png"),
+      img:"https://e7.pngegg.com/pngimages/648/16/png-clipart-fur-clothing-jacket-coat-winter-clothing-winter-coat-zipper-winter.png",
+      // img: require("./images/sam-moghadam-khamseh-kvmdsTrGOBM-unsplash 1.png"),
+      availability_status:2
     },
     {
+      id:4,
       name: "IPS LCD Gaming Monitor",
       price: 400,
       sale: 25,
       rating: 80,
-      img: require("./images/g27cq4-500x500 1.png"),
+      img:"https://e7.pngegg.com/pngimages/562/852/png-clipart-hoodie-t-shirt-clothing-bluza-sweater-t-shirt-black-top.png",
+
+      availability_status:3
+    },
+    {
+      id:5,
+      name: "The north coat",
+      price: 360,
+      sale: 0,
+      rating: 65,
+      img:"https://e7.pngegg.com/pngimages/562/852/png-clipart-hoodie-t-shirt-clothing-bluza-sweater-t-shirt-black-top.png",
+      availability_status:2
     },
   ],
 
@@ -223,3 +245,30 @@ export const newArrivalData = {
     img:require("./images/652e82cd70aa6522dd785109a455904c.png")
   },
 };
+
+
+
+
+export const teamData = [
+  {
+    img: "https://th.bing.com/th/id/R.36a637acd327c76357628dca25f838de?rik=KEv28AfFiyqYjA&pid=ImgRaw&r=0",
+    name: "Walter White",
+    profession: "Chief Executive Officer",
+    about:
+      "doloremque ipsa expedita delectus consequatur consequuntur.",
+  },
+  {
+    img: "https://th.bing.com/th/id/R.36a637acd327c76357628dca25f838de?rik=KEv28AfFiyqYjA&pid=ImgRaw&r=0",
+    name: "Walter White",
+    profession: "Chief Executive Officer",
+    about:
+      " doloremque ipsa expedita delectus consequatur consequuntur.",
+  },
+  {
+    img: "https://th.bing.com/th/id/R.36a637acd327c76357628dca25f838de?rik=KEv28AfFiyqYjA&pid=ImgRaw&r=0",
+    name: "Walter White",
+    profession: "Chief Executive Officer",
+    about:
+      "ipsa expedita delectus consequatur consequuntur.",
+  },
+];

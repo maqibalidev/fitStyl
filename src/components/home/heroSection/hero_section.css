@@ -61,8 +61,7 @@ height: clamp(300px,10vw,400px);
   }
 }
 .hero-sec-right .large-heading {
-  font-size: clamp(24px,4vw, 48px);
-}
+  font-size: clamp(24px, 3vw, 46px);}
 .hero-sec-slider .slider-btn {
   width: fit-content;
 }

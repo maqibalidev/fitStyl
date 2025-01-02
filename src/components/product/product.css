@@ -1,4 +1,5 @@
 .product-item {
+  height: fit-content;
   .item-top {
     height: 200px;
   }
@@ -8,7 +9,8 @@
   }
   .product-item-btn {
     bottom: -100px;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+   opacity: .7;
   }
   .product-item-btn:hover {
     background-color: var(--primary-color);
@@ -16,6 +18,9 @@
   &:hover {
     .product-item-btn {
       bottom: 0px;
+   &:hover{
+    opacity: 1;
+   }
     }
     .item-top img {
       scale: 1.2;
@@ -25,9 +30,10 @@
     padding: 5px 14px;
     font-size: 11px;
   }
-  .action-btns button {
+  .action-btns button , .action-btns a {
     width: 32px;
     height: 32px;
+    line-height: 0 !important;
     svg {
       height: 18px;
       width: 18px;
@@ -38,5 +44,23 @@
         color: var(--primary-color);
       }
     }
+  }
+}
+
+
+.product-fav-icon-active{
+  background-color: var(--primary-color) !important;
+  color: white;
+&:hover{
+  svg {
+    color: white !important;
+  }
+}
+}
+
+.fav-remove-icon{
+  background-color: var(--primary-color) !important;
+  svg {
+    color: white !important;
   }
 }

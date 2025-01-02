@@ -1,0 +1,9 @@
+.about-banner-sec .right{
+    height: 90vh;
+object-fit: cover;
+padding: 20px 0;
+} 
+
+.about-banner-sec .left {
+min-height: 90vh;
+}

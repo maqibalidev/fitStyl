@@ -1,0 +1,68 @@
+.team-outer-container {
+  padding-top: 50px;
+}
+.team-container {
+  margin-top: 40px;
+  gap: 20px;
+  .team-item {
+    width: 30%;
+    .profile-img-container {
+      height:  clamp(150px,  18vw, 230px);
+      width:  clamp(150px,  18vw, 230px);
+      background-color: white;
+      position: relative;
+      &::after {
+        content: "";
+        position: absolute;
+        top: 2%;
+        bottom: 2%;
+        left: 2%;
+        right: 2%;
+        margin: auto;
+        background-color: rgba(0, 0, 0, 0.479);
+        border-radius: 200px;
+        opacity: 0;
+        overflow: hidden;
+        scale: 0;
+        transition: all 0.4s ease;
+      }
+      img {
+        object-fit: cover;
+        padding: 2%;
+      }
+    }
+    .profile-name {
+      margin-top: 20px;
+    }
+    .profile-profession {
+      color: rgb(146, 146, 146);
+      margin: 8px;
+    }
+  }
+}
+.team-item:hover {
+  .icons-container {
+    display: flex !important;
+  }
+  .profile-img-container::after {
+    opacity: 1;
+    scale: 1;
+  }
+}
+.team-container .profile-img-container .icons-container {
+  gap: 6%;
+  svg {
+    min-height: 16px;
+    min-width: 16px;
+    max-height: 26px;
+    max-width: 26px;
+    height: 1.7vw;
+    width:  1.7vw;
+    fill: white;
+    background-color: transparent;
+    transition: all 0.3s ease;
+  }
+  a:hover svg{
+      scale: 1.3;
+  }
+}

@@ -25,6 +25,6 @@
     width: 60%;
     height: 100%;
     z-index: -1;
-    background: radial-gradient(circle clamp(200px, 30vw, 300px),rgba(255, 255, 255, 0.24),#0e0e0e);
+    background: radial-gradient(circle clamp(150px, 28vw, 300px),rgba(255, 255, 255, 0.24),#0e0e0e);
   }
 }

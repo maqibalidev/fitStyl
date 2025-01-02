@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "./hero_section.css"
 import { Link } from 'react-router-dom'
 import demoImg1 from '../../../assets/images/demo1.png' 
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Pagination } from 'swiper/modules';
-import { ArrowIcon } from '../../../assets/icons/icons';
+import { ArrowIcon } from '../../includes/imports';
+import SkeletonComponent from '../../skeleton/Skeleton';
 const HeroSection = () => {
+  const [isLoaded,setIsLoaded] = useState(true);
   return (
-    <div className='custom-container mx-auto row'>
+    <div className='custom-container mx-auto row position-relative'>
       <div className="col-3 hero-sec-left ps-0">
      <div className='hero-sec-left-inner border h-100 border-top-0  border-start-0  border-bottom-0 border-muted d-none d-md-block'>
      <h5 className='hero-sec-left-heading color-primary fw-medium'>Categories</h5>
@@ -25,7 +27,7 @@ const HeroSection = () => {
      </div>
       </div>
       <div className="hero-sec-right col-12 col-md-9">
-      <Swiper
+     {isLoaded ? <Swiper
         modules={[Pagination]}
         pagination={{ clickable: true }}
         spaceBetween={10}
@@ -75,6 +77,9 @@ const HeroSection = () => {
           </div>
         </SwiperSlide>
       </Swiper>
+    :
+    <SkeletonComponent count={1} isFluid={true}/>  
+    }
       </div>
     </div>
   )

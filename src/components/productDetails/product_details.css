@@ -1,0 +1,65 @@
+.product-color-btn{
+    height: 25px;
+    width: 25px;
+}
+.product-detail-left{
+    padding: clamp(20px,3vw,50px);
+    padding-bottom: 150px;
+}
+.product-detail-left img{
+  cursor: pointer;
+  width: 100%;
+    height: clamp(200px,30vw,300px);
+    object-fit: contain;
+}
+.product-details-img-item{
+background-color: rgb(255, 255, 255);
+cursor: pointer;
+transition: all .2s ease;
+
+img{
+    object-fit: contain;
+    width: 90%;
+    max-height: 50px;
+}
+}
+
+.product-details-img-item-selected{
+    background-color: rgba(255, 188, 3, 0.164) !important;
+}
+
+.colors-container .product-color-btn{
+    cursor: pointer;
+    background-color: var(--product-color);
+
+}
+.colors-container .product-color-btn-active{
+    border: 2px solid white;
+outline: 2px solid var(--primary-dark-color);
+}
+
+.size-container .product-size-btn{
+    background-color: white;
+    color: black;
+    height: 40px;
+    font-size: 13px;
+    width: 40px;
+    border: 1px solid rgba(0, 0, 0, 0.11);
+/* outline: 2px solid var(--primary-dark-color); */
+}
+.size-container .product-size-btn-active{
+    background-color: var(--primary-dark-color);
+    border: none;
+color: white;
+}
+.product-details-btn{
+    line-height: 0;
+    border: 1px solid rgba(0, 0, 0, 0.219);
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    transition: all .2s ease;
+    &:hover{
+        background-color: var(--primary-color);
+        color: white;
+    }
+}

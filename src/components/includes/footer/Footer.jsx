@@ -2,7 +2,7 @@ import React from "react";
 import "./footer.css";
 import { Link } from "react-router-dom";
 import { SendIcon, SocialMediaIcon1, SocialMediaIcon2, SocialMediaIcon3, SocialMediaIcon4 } from "../../../assets/icons/icons";
-const Footer = () => {
+export const Footer = () => {
   return (
     <div className="footer-container bg-color-black color-light">
       <div className="custom-container mx-auto row py-5 gx-0">

@@ -17,6 +17,11 @@
   .custom-header .nav-btns{
     display: none !important;
   }
+.team-container {
+  .team-item {
+    width: 100% !important;
+  }}
+
   }
 @media (max-width:576px) , (max-width:767px)  {
     .new-arrival-item{
@@ -35,3 +40,16 @@
 margin: auto;
     }
 }  
+
+@media screen and (max-width:768px) {
+  .login-form{
+    width: 80% !important;
+  }
+  .login-form-button{
+    width: 100%;
+  }
+  .about-banner-sec .right{
+    position: static !important;
+    height: 40vh !important;
+  }
+}

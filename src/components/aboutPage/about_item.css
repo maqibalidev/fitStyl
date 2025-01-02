@@ -1,0 +1,11 @@
+.about-page-item .icon{
+    outline: 10px solid rgba(250, 187, 71, 0.781); 
+    padding: 10px;
+ }
+.about-page-item{
+    height: 200px;
+}
+.about-page-bordered-item{
+    height: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.171);
+}
