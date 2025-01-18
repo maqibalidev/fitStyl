@@ -22,3 +22,7 @@ max-height: 100vh;
     height: 1px;
     background-color: rgb(99, 99, 99);
 }
+
+.forget-pass-model{
+    margin-top: 25vh;
+}

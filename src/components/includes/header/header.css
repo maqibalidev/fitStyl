@@ -53,15 +53,11 @@ a{
     font-size: 14px !;
 }
     &:hover{
-        background-color:rgba(255, 166, 0, 0.247) ;
+        background-color: orange;
     }
 }
-    .active{
-        background-color: orange;
-        &:hover{
-            background-color: orange;  
-        }
-    }
+ 
+    
 }
 
 .header-item-label{

@@ -10,7 +10,8 @@ const HeaderMenuItemIcon = ({
   isSearchItem = false,
   setFloatingInput,
   link = "#",
-  isBottomNav=false
+  isBottomNav=false,
+
 }) => {
 
   const renderSearchIcon = () => (
@@ -36,10 +37,10 @@ const HeaderMenuItemIcon = ({
   // Render for the dropdown menu items
   const renderDropdownMenuItems = () => {
     return dropMenuItems.map((item, key) => (
-      <li key={key}>
+      <li  onClick={item.handleClick} key={key}>
         <Link
           className={`dropdown-item ${item.active ? "active" : ""} d-flex align-items-center`}
-          to="#"
+          to={item?.link || "/"}
         >
           {item.Icon}
           <span className="ms-2">{item.label}</span>
@@ -69,6 +70,7 @@ const HeaderMenuItemIcon = ({
       {isDropMenu ? (
         <div className="dropdown">
           <Link
+          
             to={link}
             className={`text-${color} header-icon-item header-icon-account-item rounded-circle d-flex  align-items-center justify-content-center`}
             data-bs-toggle="dropdown"

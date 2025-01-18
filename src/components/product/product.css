@@ -64,3 +64,6 @@
     color: white !important;
   }
 }
+.product-fav-icon svg{
+  margin: 2px 0 0 1px;
+}

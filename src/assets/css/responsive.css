@@ -52,4 +52,15 @@ margin: auto;
     position: static !important;
     height: 40vh !important;
   }
+  .contact-admin-msg-text , .contact-msg-text{
+
+    max-width: 80% !important;
+
+  }
+  .contact-right {
+  min-height: 80vh !important;
+  max-height: 80vh !important;
+
+}
+
 }

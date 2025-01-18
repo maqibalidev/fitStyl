@@ -10,11 +10,11 @@ export const Image = ({url}) => {
     
   return (
     <>
-      <img className='user-select-none' src={img} alt=""style={{ display: isLoaded ? "block" : "none" }}
+      <img className='user-select-none' src={url} alt=""style={{ display: isLoaded ? "block" : "none" }}
       onLoad={() => setIsLoaded(true)}
       onError={() => setImageSrc(imagePlceholder)}
     />
-{!isLoaded && <div className='loader'></div> }
+{!isLoaded && <div className='custom-img-loader'></div> }
     </>
 
   )

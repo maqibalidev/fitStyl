@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "./header.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../assets/images/fs_logo.low.webp";
 import {
   AccountIcon,
@@ -12,18 +12,30 @@ import {
 } from "../../../assets/icons/icons";
 import HeaderMenuItemIcon from "./HeaderMenuItemIcon";
 import HeaderSearchInput from "./HeaderSearchInput";
-import { CartContext, favoriteContext } from "../imports";
+import { AuthContext, CartContext, favoriteContext } from "../imports";
+import { toast } from "react-toastify";
 
-export const Header = () => {
+ export const Header = ({activePage="home"}) => {
+  const navigate = useNavigate();
+    const authContext = useContext(AuthContext);
       const { favProducts} = useContext(favoriteContext);
       const { products} = useContext(CartContext);
   const [showFloatingInput, setFloatingInput] = useState(false);
+  const [isLogin,setIsLogin] = useState(false);
   const navLinks = [
-    { label: "Home", url: "/", active: true },
-    { label: "Contact", url: "/contact", active: false },
-    { label: "About", url: "/about", active: false },
-    { label: "Sign Up", url: "/signup", active: false },
+    { label: "Home", url: "/", active: activePage==="home"},
+    { label: "Contact", url: "/contact", active : activePage === "contact" },
+    { label: "About", url: "/about", active: activePage==="about"},
+    !authContext.data.authToken && { label: "Sign Up", url: "/signup", active: activePage==="signup"},
   ];
+
+  useEffect(()=>{
+    if(authContext.data.authToken){
+      setIsLogin(true)
+    }
+    setIsLogin(false)
+      },[isLogin])
+
 
   const headerSearchContainerRef = useRef(null);
 
@@ -33,6 +45,16 @@ export const Header = () => {
       setFloatingInput(false);
     }
   };
+
+
+  const handleLogout = ()=>{
+if(authContext.data.authToken){
+  authContext.dispatch({type:"LOGOUT"});
+  toast.success("logged out successfully!")
+}
+  }
+
+
 
   return (
     <>
@@ -58,18 +80,19 @@ export const Header = () => {
                 </button>
               </div>
 
-              <HeaderMenuItemIcon Icon={FavoriteIcon} count_label={favProducts.length} link="/favorites"/>
+           {authContext.data.authToken && <>
+            <HeaderMenuItemIcon Icon={FavoriteIcon} count_label={favProducts.length} link="/favorites"/>
               <HeaderMenuItemIcon Icon={CartIcon} count_label={9} link="/cart" />
-              <HeaderMenuItemIcon
+          <HeaderMenuItemIcon
                 isDropMenu={true}
                 Icon={AccountIcon}
                 dropMenuItems={[
-                  { label: "Manage My Account", active: true, Icon: <AccountIcon /> },
-                  { label: "My Order", active: false, Icon: <OrdersIcon /> },
-                  { label: "My Reviews", active: false, Icon: <RatingIcon /> },
-                  { label: "Logout", active: false, Icon: <LogoutIcon /> },
+                  { label: "Manage My Account",link:"/account", Icon: <AccountIcon /> },
+                  { label: "My Order", Icon: <OrdersIcon /> },
+                  { label: "My Reviews", Icon: <RatingIcon /> },
+                  { label: "Logout", Icon: <LogoutIcon /> ,handleClick:handleLogout},
                 ]}
-              />
+              /></>}
             </div>
             <button
               className="navbar-toggler border-0 shadow-none px-0"
@@ -114,42 +137,46 @@ export const Header = () => {
                   </svg>
                 </button>
               </form>
-              <HeaderMenuItemIcon Icon={FavoriteIcon} count_label={favProducts.length} link="/favorites"/>
+           {
+            authContext.data.authToken && <>
+               <HeaderMenuItemIcon Icon={FavoriteIcon} count_label={favProducts.length} link="/favorites"/>
               <HeaderMenuItemIcon Icon={CartIcon} count_label={products.length} link="/cart" />
-              <HeaderMenuItemIcon
+             <HeaderMenuItemIcon
                 isDropMenu={true}
                 Icon={AccountIcon}
                 dropMenuItems={[
-                  { label: "Manage My Account", active: true, Icon: <AccountIcon /> },
-                  { label: "My Order", active: false, Icon: <OrdersIcon /> },
-                  { label: "My Reviews", active: false, Icon: <RatingIcon /> },
-                  { label: "Logout", active: false, Icon: <LogoutIcon /> },
+                  { label: "Manage My Account",link:"/account", Icon: <AccountIcon /> },
+                  { label: "My Order",  Icon: <OrdersIcon /> },
+                  { label: "My Reviews",  Icon: <RatingIcon /> },
+                  { label: "Logout",  Icon: <LogoutIcon />, handleClick:handleLogout },
                 ]}
               />
+            </>
+           }
             </div>
           </div>
         </div>
       </nav>
 
       {/* BOTTOM NAVBAR (only small screens) */}
-      <div className="d-flex position-fixed z-2 floating-bottom-navbar mx-auto justify-content-center bottom-0 m-2 p-2 d-sm-none">
-        <div className="header-right gap-4 icons-container align-items-center d-flex">
+      {authContext.data.authToken && <div className="d-flex position-fixed z-2 floating-bottom-navbar mx-auto justify-content-center bottom-0 m-2 p-2 d-sm-none">
+      <div className="header-right gap-4 icons-container align-items-center d-flex">
           <HeaderMenuItemIcon Icon={FavoriteIcon} count_label={favProducts.length} color="light" isBottomNav={true} link="/favorites" />
           <HeaderMenuItemIcon Icon={CartIcon} count_label={products.length} color="light" isBottomNav={true} link="/cart" />
           <HeaderMenuItemIcon isSearchItem={true} setFloatingInput={setFloatingInput} />
-          <HeaderMenuItemIcon
+       <HeaderMenuItemIcon
             isDropMenu={true}
             Icon={AccountIcon}
             color="light"
             dropMenuItems={[
-              { label: "Manage My Account", active: true, Icon: <AccountIcon /> },
-              { label: "My Order", active: false, Icon: <OrdersIcon /> },
-              { label: "My Reviews", active: false, Icon: <RatingIcon /> },
-              { label: "Logout", active: false, Icon: <LogoutIcon /> },
+              { label: "Manage My Account",link:"/account", Icon: <AccountIcon /> },
+              { label: "My Order",  Icon: <OrdersIcon /> },
+              { label: "My Reviews",  Icon: <RatingIcon /> },
+              { label: "Logout",  Icon: <LogoutIcon />,handleClick:handleLogout },
             ]}
           />
         </div>
-      </div>
+      </div>}
 
       {/* FLOATING SEARCH INPUT */}
       <HeaderSearchInput handleClick={handleClick} ref={headerSearchContainerRef} showFloatingInput={showFloatingInput} />

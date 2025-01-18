@@ -28,6 +28,8 @@ export {
   CallIcon,
   MailIcon,
   UpArrowIcon,
+  SadEmoji,
+  HappyEmoji
 } from "../../assets/icons/icons";
 
 // Contexts
@@ -56,4 +58,6 @@ export { Image } from "../../components/customImage/Image"
 export { Loader } from "../../components/includes/Loader"
 export { NewArrivalItem } from "../../components/home/newArrival/NewArrivalItem"
 export { CartContext,CartProvider } from "../../contexts/cartContext";
+export {AuthContext,AuthProvider } from "../../contexts/AuthContext";
 export { favoriteContext,FavoriteProvider } from "../../contexts/favoritesContext";
+export {loginSchema,registerSchema} from "../../schema/schemas"

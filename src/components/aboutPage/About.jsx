@@ -6,7 +6,7 @@ import { AboutItem, Footer, Header, TeamSection } from "../includes/imports";
 const  About = () => {
   return (
 <div className="d-flex flex-column justify-content-between">
-      <Header />
+      <Header  activePage="about"/>
 
       <div className="position-relative">
         <div className="custom-container mx-auto">

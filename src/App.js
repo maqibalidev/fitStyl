@@ -1,10 +1,9 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "swiper/css";
 import "swiper/css/pagination";
-
 import { Root } from "./routes/Root";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -13,20 +12,25 @@ import { FavoriteProvider } from "./contexts/favoritesContext";
 import "./App.css";
 import "./assets/css/responsive.css";
 import { SkeletonTheme } from "react-loading-skeleton";
-import 'react-loading-skeleton/dist/skeleton.css'
+import "react-loading-skeleton/dist/skeleton.css";
+import Test from "./Test";
+import { SocketProvider } from "./contexts/socketContext";
 function App() {
   const router = createBrowserRouter([{ path: "*", element: <Root /> }]);
   return (
-    
     <AuthProvider>
-      <FavoriteProvider>
-      <CartProvider>
-        <ToastContainer autoClose={2000} toastClassName="toast-class" />
-        <SkeletonTheme baseColor="#d2d2d2" highlightColor="#e5e5e5">
-        <RouterProvider router={router} />
-        </SkeletonTheme>
-      </CartProvider>
-      </FavoriteProvider>
+     
+        <FavoriteProvider>
+          <CartProvider>
+            <ToastContainer autoClose={2000} toastClassName="toast-class" />
+            <SkeletonTheme baseColor="#d2d2d2" highlightColor="#e5e5e5">
+            <SocketProvider>
+            <RouterProvider router={router} />
+              </SocketProvider>
+            </SkeletonTheme>
+          </CartProvider>
+        </FavoriteProvider>
+     
     </AuthProvider>
   );
 }

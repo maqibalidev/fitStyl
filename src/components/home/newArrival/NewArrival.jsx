@@ -3,8 +3,8 @@ import {CustomHeader,NewArrivalItem} from "../../includes/imports"
 import { newArrivalData } from "../../../assets/data";
 import "./new_arrival.css";
 
-const NewArrival = () => {
-  const { banner1, banner2, banner3, banner4 } = newArrivalData;
+
+const NewArrival = ({data}) => {
 
   return (
     <div className="custom-container mx-auto new-arrival-outer-container">
@@ -12,31 +12,33 @@ const NewArrival = () => {
         <CustomHeader smallHeading="Featured" largeHeading="New Arrival" />
       </div>
 
-      <div className="new-arrival-container d-flex flex-column mt-5 flex-md-row">
+   {data && data.length === 4 &&    <div className="new-arrival-container d-flex flex-column mt-5 flex-md-row">
+        
         <NewArrivalItem
-          img={banner1.img}
-          desc="Lorem ipsum dolor sit amet consectetur, adipisicing elit"
+          img={data[0].image_url}
+          desc={data[0].banner_desc}
         />
         <div className="d-flex flex-column right">
           <NewArrivalItem
-            img={banner2.img}
+                 img={data[1].image_url}
+                 desc={data[1].banner_desc}
             showImageRight={true}
-            desc="Lorem ipsum dolor sit amet consectetur, adipisicing elit"
+            
           />
           <div className="d-flex right flex-column flex-sm-row">
             <NewArrivalItem
-              img={banner3.img}
-              desc="Lorem ipsum dolor sit amet"
+                 img={data[2].image_url}
+                 desc={data[2].banner_desc}
               isBottomItem={true}
             />
             <NewArrivalItem
-              img={banner4.img}
-              desc="Lorem ipsum dolor sit amet"
+                 img={data[3].image_url}
+                 desc={data[3].banner_desc}
               isBottomItem={true}
             />
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

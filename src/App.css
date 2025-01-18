@@ -65,4 +65,60 @@ background-color: rgb(243, 243, 243);
     z-index: 9999;
   }
   
- 
+  .Toastify__toast--success , .Toastify__toast--error , .Toastify__toast--info  {
+    background-color: rgba(7, 7, 7, 0.473) !important; /* Red error */
+    backdrop-filter: blur(10px);
+    color: white;
+    svg{
+        color: white !important;
+    }
+  }
+
+  .image-loader {
+    /* HTML: <div class="loader"></div> */
+      width: fit-content;
+      font-size: 20px;
+      font-family: system-ui,sans-serif;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #0000;
+      -webkit-text-stroke: 1px #ffffff36;
+      --l:#0000 45%,#ffffff1c 0 55%,#0000 0;
+      --g:0/300% 100% no-repeat text;
+      background: 
+        linear-gradient(-60deg,var(--l)) var(--g),
+        linear-gradient( 60deg,var(--l)) var(--g);
+      animation: l7 4s linear infinite;
+    }
+    .image-loader:before {
+      content: "Loading";
+    }
+    @keyframes l7 {
+      0%  {background-position: 100%,0   }
+      50% {background-position: 0   ,0   }
+      to  {background-position: 0   ,100%}
+    }
+  .image-loader:before {
+    content: "Loading";
+  }
+  @keyframes l7 {
+    0%  {background-position: 100%,0   }
+    50% {background-position: 0   ,0   }
+    to  {background-position: 0   ,100%}
+  }
+
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  /* For Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  .loader-overlay{
+    z-index: 99999;
+  }

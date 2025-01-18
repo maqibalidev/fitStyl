@@ -2,19 +2,24 @@
   cursor: pointer;
   border: 1px solid var(--light-grey-color);
   transition: all 0.4s ease-out;
-  svg {
+  height: 140px;
+  img {
     height: 40px;
     width: 40px;
     transition: all 0.2s ease;
   }
   .title {
     transition: all 0.2s ease;
+    line-height: 1.1;
   }
   &:hover {
     background-color: var(--primary-color);
-    svg,
+
     .title {
       color: white;
+    }
+    img{
+      filter: invert(1) brightness(100%) contrast(100%) grayscale(100%);
     }
   }
 }

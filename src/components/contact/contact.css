@@ -43,17 +43,100 @@ background-image: url("../../assets/images/side_img.png");
     backdrop-filter: blur(5px); /* Adjust blur value */
     font-size: 14px;
     -webkit-backdrop-filter: blur(5px); /* For Safari */
+    width: fit-content;
+    min-width: 120px;
+  text-align: start;
+  max-width: 50%;
+}
+.contact-msg-time{
+  font-size: 10px;
 }
 .contact-admin-msg-text{
   background-color: rgba(219, 146, 0, 0.63) ;  
   backdrop-filter: blur(5px); /* Adjust blur value */
   font-size: 14px;
   -webkit-backdrop-filter: blur(5px); /* For Safari */
+  width: fit-content;
+  min-width: 120px;
+  max-width: 50%;
 }
-.chat-container{
-    overflow-y: auto;
+/* Custom scrollbar styling for .chat-container */
+.chat-container {
+  overflow-y: auto;
 }
+
+/* Scrollbar styles */
+.chat-container::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.chat-container::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track (background of the scrollbar) */
+  border-radius: 10px;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background: #e98c00; /* Color of the scrollbar thumb (the draggable part) */
+  border-radius: 10px;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+  background: #ca7900; /* Color when hovered */
+}
+
+.chat-container::-webkit-scrollbar-button {
+  display: none; /* Hide buttons (up and down arrows) */
+}
+
 .chat-container .chatting-sec{
     flex-grow: 1 !important;
     height: 100%;
+}
+.contact-send-msg-btn{
+  width: 40px !important;
+  height: 38px !important;
+  line-height: 0 !important;
+  padding: 0 !important;
+
+  svg{
+    height: 20px;
+    width: 20px;
+  }
+}
+
+
+/* Animation for the new message appearance */
+.contact-message {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px); /* Optional: Add a slight upward translation for smooth effect */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* Reset translation */
+  }
+}
+
+/* Optional: For a sliding effect */
+.contact-message.slide-in {
+  opacity: 0;
+  transform: translateX(30px); /* Slide from the right */
+  animation: slideIn 0.5s forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

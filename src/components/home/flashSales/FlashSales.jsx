@@ -1,19 +1,37 @@
-import React, { memo, useState } from "react";
+import React, { memo, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-import {CustomHeader,CustomButton,Product} from "../../includes/imports"
-import { productData } from "../../../assets/data";
+import { CustomHeader, CustomButton, Product } from "../../includes/imports";
+import SkeletonComponent from "../../skeleton/Skeleton";
+import { CartContext, favoriteContext } from "../../includes/imports"; // Ensure context imports
 import "swiper/css";
 import "swiper/css/pagination";
-import SkeletonComponent from "../../skeleton/Skeleton";
 
-const FlashSales = () => {
-  const [isLoaded,setIsLoaded] = useState(true);
+const FlashSales = ({ data }) => {
+  const { products, addProduct } = useContext(CartContext);
+  const { favProducts, addFavProduct, removeFavProduct } =useContext(favoriteContext);
+
+  const handleAddToCart = (id) => {
+    const exist = products.find((product) => product.id === id);
+    if (!exist) {
+      addProduct(id);
+    }
+  };
+
+  const handleFavoriteToggle = (id, title, img, price, rating) => {
+    const existFav = favProducts.find((product) => product.id === id);
+    if (!existFav) {
+      addFavProduct(id, title, img, price, rating);
+    } else {
+      removeFavProduct(id);
+    }
+  };
+
   const swiperConfig = {
     spaceBetween: 20,
     slidesPerView: 1,
     pagination: {
-      el:".flash_sales-custom-pagination",
+      el: ".flash_sales-custom-pagination",
       bulletClass: "flash_sales_bullet",
       bulletActiveClass: "flash_sales_bullet-active",
       clickable: true,
@@ -29,8 +47,6 @@ const FlashSales = () => {
     modules: [Navigation, Pagination],
   };
 
-
-
   return (
     <div className="custom-container mx-auto border-bottom border-muted">
       <CustomHeader
@@ -38,32 +54,39 @@ const FlashSales = () => {
         largeHeading="Flash Sales"
         navBtnClass="flash-btn"
         showNav={true}
-        isLoaded={isLoaded}
+        isLoaded={data && data.length > 0}
       />
       <div className="product-container mt-4">
-        {isLoaded ? (
+        {data && data.length > 0 ? (
           <Swiper {...swiperConfig} className="my-4 my-sm-5">
-          {productData.flashData.map((item) => (
-            <SwiperSlide key={item.id}>
-              <Product
-                id={item.id}
-                img={item.img}
-                offSale={item.sale}
-                price={item.price}
-                isNew={true}
-                title={item.name}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        ):
-        <SkeletonComponent count={4} showTiles={true} height={150}/>
-        }
-        <div className="d-flex d-sm-none flash_sales-custom-pagination justify-content-center my-3"></div>
+            {data.map((item) => (
+              <SwiperSlide key={item.id}>
+                <Product
+                  id={item.id}
+                  img={item.images[0]}
+                  offSale={item.off_sale}
+                  price={item.final_price}
+                  rating={item.rating}
+                  title={item.name}
+                  exist={
+                    !!favProducts.find((product) => product.id === item.id)
+                  }
+                  onAddToCart={handleAddToCart}
+                  onToggleFavorite={handleFavoriteToggle}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <SkeletonComponent count={4} showTiles={true} height={150} />
+        )}
+        {data && data.length > 0 && (
+          <div className="d-flex d-sm-none flash_sales-custom-pagination justify-content-center my-3"></div>
+        )}
       </div>
 
       <div className="d-flex justify-content-center my-5">
-        <CustomButton text="View All Products" link="/products"/>
+        <CustomButton text="View All Products" link="/products" />
       </div>
     </div>
   );

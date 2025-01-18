@@ -2,13 +2,13 @@ import { createContext, useReducer } from "react";
 const cartReducer = (state, action) => {
   switch (action.type) {
     case "ADD_PRODUCT":
-      const updatedCart = [...state,action.payload.id];
+      const updatedCart = [...state,action.payload];
       localStorage.setItem("favoritesData", JSON.stringify(updatedCart));
       return updatedCart;
 
     case "REMOVE_PRODUCT":
       const filteredCart = state.filter(
-        (product) => product !== action.payload.id
+        (product) => product.id !== action.payload.id
       );
       localStorage.setItem("favoritesData", JSON.stringify(filteredCart));
       return filteredCart;
@@ -30,8 +30,8 @@ export const FavoriteProvider = ({ children }) => {
 );
 
 
-  const addFavProduct = (id) =>
-    dispatch({ type: "ADD_PRODUCT", payload: { id } });
+  const addFavProduct = (id,title,image,price,rating) =>
+    dispatch({ type: "ADD_PRODUCT", payload: { id,title,image,price,rating} });
   const removeFavProduct = (id) =>
     dispatch({ type: "REMOVE_PRODUCT", payload: { id } });
   const clearFavorites = () => dispatch({ type: "CLEAR_CART" });

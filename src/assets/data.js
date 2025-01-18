@@ -246,9 +246,6 @@ export const newArrivalData = {
   },
 };
 
-
-
-
 export const teamData = [
   {
     img: "https://th.bing.com/th/id/R.36a637acd327c76357628dca25f838de?rik=KEv28AfFiyqYjA&pid=ImgRaw&r=0",

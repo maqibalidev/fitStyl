@@ -50,7 +50,7 @@ const Cart = () => {
 
   return (
     <div className="d-flex flex-column justify-content-between vh-100">
-      <Header />
+      <Header  activePage="cart"/>
       <div className="cart-container custom-container mx-auto my-5">
 
       <div>

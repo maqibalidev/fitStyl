@@ -5,6 +5,7 @@
 .product-detail-left{
     padding: clamp(20px,3vw,50px);
     padding-bottom: 150px;
+    min-height: 60vh;
 }
 .product-detail-left img{
   cursor: pointer;
@@ -63,3 +64,5 @@ color: white;
         color: white;
     }
 }
+
+
