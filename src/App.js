@@ -15,7 +15,6 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Test from "./Test";
 import { SocketProvider } from "./contexts/socketContext";
-import React from "react";
 function App() {
   const router = createBrowserRouter([{ path: "*", element: <Root /> }]);
   return (
@@ -26,9 +25,7 @@ function App() {
             <ToastContainer autoClose={2000} toastClassName="toast-class" />
             <SkeletonTheme baseColor="#d2d2d2" highlightColor="#e5e5e5">
             <SocketProvider>
-            <React.Suspense fallback={<ErrorBoundary />}>
             <RouterProvider router={router} />
-          </React.Suspense>
               </SocketProvider>
             </SkeletonTheme>
           </CartProvider>
