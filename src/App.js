@@ -16,7 +16,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 import Test from "./Test";
 import { SocketProvider } from "./contexts/socketContext";
 import React from "react";
-import ErrorBoundary from "./components/includes/ErrorBoundary";
 function App() {
   const router = createBrowserRouter([{ path: "*", element: <Root /> }]);
   return (
