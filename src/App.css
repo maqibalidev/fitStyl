@@ -65,7 +65,7 @@ background-color: rgb(243, 243, 243);
     z-index: 9999;
   }
   
-  .Toastify__toast--success , .Toastify__toast--error , .Toastify__toast--info  {
+  .Toastify__toast--success , .Toastify__toast--error , .Toastify__toast--info , .Toastify__toast--warning  {
     background-color: rgba(7, 7, 7, 0.473) !important; /* Red error */
     backdrop-filter: blur(10px);
     color: white;

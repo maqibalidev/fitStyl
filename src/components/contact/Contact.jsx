@@ -18,7 +18,7 @@ import moment from "moment";
 const Contact = () => {
   const { sendMessage, socket } = useSocket();
   const { data } = useContext(AuthContext);
-const id = data?.id || data.socketId; 
+const id = data?.id ? data.id : data?.socketId; 
   const [msgData, setMsgData] = useState([]);
   const [messageText, setMsgText] = useState("");
   const chatContainerRef = useRef(null);

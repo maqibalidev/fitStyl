@@ -1,27 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
 import { productData } from "../../../assets/data";
-import { CartContext, CustomHeader, favoriteContext, Product } from "../../includes/imports";
+import { AuthContext, CartContext, CustomHeader, favoriteContext, Product } from "../../includes/imports";
 import { handleApiError } from "../../../helpers/errorHandler";
 import { getFlashProducts } from "../../../services/userListingsApi";
+import { toast } from "react-toastify";
+import { useFavorites } from "../../../hooks/useAddFav";
+import { useAddCart } from "../../../hooks/useAddCart";
 const BestSelling = ({data}) => {
 
     const { products, addProduct } = useContext(CartContext);
     const { favProducts, addFavProduct, removeFavProduct } =useContext(favoriteContext);
+ const { AddToCart } = useAddCart(products, addProduct); 
+  const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
   const handleAddToCart = (id) => {
-    const exist = products.find((product) => product.id === id);
-    if (!exist) {
-      addProduct(id);
-    }
+    AddToCart(id);
   };
 
   const handleFavoriteToggle = (id, title, img, price, rating) => {
-    const existFav = favProducts.find((product) => product.id === id);
-    if (!existFav) {
-      addFavProduct(id, title, img, price, rating);
-    } else {
-      removeFavProduct(id);
-    }
+    FavoriteToggle(id, title, img, price, rating)
   };
+
+  
 
   return (
     <div className="custom-container mx-auto">

@@ -7,6 +7,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import Home from "../components/home/Home";
 import { About,Cart,Contact,Loader } from "../components/includes/imports";
 import VerifyPage from "../components/verifyPage/VerifyPage";
+import ErrorBoundary from "../components/includes/ErrorBoundary";
 
 const HomePage = lazy(() => import("../components/home/Home"));
 const Register = lazy(() => import("../components/register/Register"));
@@ -68,7 +69,8 @@ export const Root = () => {
     <Suspense
       fallback={
        <Loader/>
-      }>
+      }
+      >
       <Routes>
    
        <Route path="/" element={<HomePage />} />

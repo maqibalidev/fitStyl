@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_API_URL,
+  baseURL: "https://fitstylbackedn-production.up.railway.app/api/v1/",
   // baseURL:"http://192.168.0.106:8000/api/v1/",
   timeout: 30000,
 });

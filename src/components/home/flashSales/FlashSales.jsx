@@ -1,30 +1,26 @@
 import React, { memo, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-import { CustomHeader, CustomButton, Product } from "../../includes/imports";
+import { CustomHeader, CustomButton, Product, AuthContext } from "../../includes/imports";
 import SkeletonComponent from "../../skeleton/Skeleton";
 import { CartContext, favoriteContext } from "../../includes/imports"; // Ensure context imports
 import "swiper/css";
 import "swiper/css/pagination";
+import { toast } from "react-toastify";
+import { useAddCart } from "../../../hooks/useAddCart";
+import { useFavorites } from "../../../hooks/useAddFav";
 
 const FlashSales = ({ data }) => {
   const { products, addProduct } = useContext(CartContext);
   const { favProducts, addFavProduct, removeFavProduct } =useContext(favoriteContext);
-
+  const { AddToCart } = useAddCart(products, addProduct); 
+  const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
   const handleAddToCart = (id) => {
-    const exist = products.find((product) => product.id === id);
-    if (!exist) {
-      addProduct(id);
-    }
+    AddToCart(id);
   };
 
   const handleFavoriteToggle = (id, title, img, price, rating) => {
-    const existFav = favProducts.find((product) => product.id === id);
-    if (!existFav) {
-      addFavProduct(id, title, img, price, rating);
-    } else {
-      removeFavProduct(id);
-    }
+    FavoriteToggle(id, title, img, price, rating)
   };
 
   const swiperConfig = {

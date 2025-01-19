@@ -125,7 +125,7 @@ const AccountPage = () => {
           >
             <h5 className="fw-medium color-primary">Edit Your Profile</h5>
             <div className="row ">
-              <div className="col-6">
+              <div className="col-12 col-sm-6">
                 <div>
                   <span>Username</span>
                   <input
@@ -142,7 +142,7 @@ const AccountPage = () => {
                   <span className="text-danger">{formik.errors.username}</span>
                 )}
               </div>
-              <div className="col-6">
+              <div className="col-12 col-sm-6">
                 <div>
                   <span>
                     Email{" "}
