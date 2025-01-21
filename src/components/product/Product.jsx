@@ -6,6 +6,7 @@ import {
   RatingIcon,
   Image,
   CancelIcon,
+  CartIcon,
 } from "../includes/imports";
 import { Link, useNavigate } from "react-router-dom";
 import SpinnerLoader from "../includes/SpinnerLoader";
@@ -39,15 +40,31 @@ setLoading(false)
 },[existInCart])
 
 
-const handleAddToCart = ()=>{
-setLoading(true)
-  onAddToCart(id)
 
+const handleCartIconClick = (e)=>{
+  e.stopPropagation();
+ if(existInCart){
+  navigate("/cart")
+ }else{
+  setLoading(true)
+  onAddToCart(id)
+ }
+}
+
+
+const handleProductClick = (e)=>{
+  e.stopPropagation();
+  navigate(`/product?id=${id}`)
+}
+
+const handleFavoriteClick = (e)=>{
+  e.stopPropagation();
+  onToggleFavorite(id,title,img,price,rating)
 }
 
 
     return (
-      <div className="product-item position-relative w-100">
+      <div onClick={(e)=>handleProductClick(e)}  className="product-item position-relative w-100">
            <div className="position-relative">
  {loading &&   <div  className="cart-item-loader position-absolute top-0 left-0 pb-5 w-100 h-100  d-flex align-items-center justify-content-center">
      <div className="relative w-100 h-100 d-flex align-items-center justify-content-center pb-5">
@@ -66,25 +83,25 @@ setLoading(true)
         )}
        <span className="z-1 action-btns end-0 m-2 position-absolute top-0 d-flex flex-column gap-2">
        {
-        !isFavProduct ?  <button onClick={()=>onToggleFavorite(id,title,img,price,rating)} className={`bg-color-light ${exist && "product-fav-icon-active "} product-fav-icon rounded-circle border-0 d-flex align-items-center justify-content-center`}>
+        !isFavProduct ?  <button onClick={(e)=>handleFavoriteClick(e)} className={`bg-color-light ${exist && "product-fav-icon-active "} product-fav-icon rounded-circle border-0 d-flex align-items-center justify-content-center`}>
         <FavoriteIcon />
       </button>
 
       :
-      <button onClick={()=>onToggleFavorite(id,title,img,price,rating)} className={`bg-color-light fav-remove-icon rounded-circle border-0 d-flex align-items-center justify-content-center`}>
+      <button onClick={(e)=>handleFavoriteClick(e)} className={`bg-color-light  fav-remove-icon rounded-circle border-0 d-flex align-items-center justify-content-center`}>
       <CancelIcon />
     </button>
        }
-        <Link
-          to={`/product?id=${id}`}
-          className="bg-color-light  rounded-circle border-0 d-flex align-items-center justify-content-center"
+        <button
+        onClick={(e)=>handleCartIconClick(e)}
+          className={`bg-color-light  rounded-circle border-0 d-flex align-items-center justify-content-center ${existInCart && "product-fav-icon-active "}`}
         >
-          <EyeIcon />
-        </Link>
+          <CartIcon />
+        </button>
       </span>
-        <div className="item-top p-4 rounded-1 overflow-hidden bg-color-lightgrey d-flex justify-content-center align-items-center position-relative">
+        <div className="item-top p-2 rounded-1 overflow-hidden bg-color-lightgrey d-flex justify-content-center align-items-center position-relative">
           <Image url={img} />
-          {existInCart ?
+          {/* {existInCart ?
           <button
           onClick={()=>navigate("/cart")}
           className="text-light position-absolute product-item-btn bg-color-dark-orange w-100 p-2 border-0"
@@ -96,7 +113,7 @@ setLoading(true)
         className="text-light position-absolute product-item-btn bg-color-dark-orange w-100 p-2 border-0"
       >
         Add To Cart
-      </button>}
+      </button>} */}
         </div>
         <div className="item-body py-3">
           <span className="title d-block mb-1 fw-medium">{title}</span>

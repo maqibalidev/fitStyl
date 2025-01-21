@@ -70,60 +70,64 @@ const handleDecrement = () => {
 <div className="custom-container mx-auto row py-5">
  
   
-  <div className=" product-detail-left  col-12 col-md-7 bg-color-lightgrey d-flex align-items-center justify-content-center position-relative">
+  <div className={`${product[0]?.images?.length > 1 ? "product-detail-left-bottom-padding": null} product-detail-left  col-12 col-md-7 bg-color-lightgrey d-flex align-items-center justify-content-center position-relative`}>
 {
 
   product && product.length > 0 && <>
           <Image url={image} />
-
+          {
+  product[0]?.images?.length > 1 ?
 <div className="product-images-bottom position-absolute bottom-0 start-0 end-0 mx-auto d-flex">
 
-<Swiper
-spaceBetween={10}
-onSwiper={(swiper) => setSwiperInstance(swiper)} 
-        slidesPerView={2}
-           pagination={{
-          el: ".flash_sales-custom-pagination", 
-          bulletClass: "flash_sales_bullet", 
-          bulletActiveClass: "flash_sales_bullet-active",
-          clickable: true,
-        }}
-        modules={[Navigation,Pagination]}
-        breakpoints={{
+ <Swiper
+  spaceBetween={10}
+  onSwiper={(swiper) => setSwiperInstance(swiper)} 
+          slidesPerView={2}
+             pagination={{
+            el: ".flash_sales-custom-pagination", 
+            bulletClass: "flash_sales_bullet", 
+            bulletActiveClass: "flash_sales_bullet-active",
+            clickable: true,
+          }}
+          modules={[Navigation,Pagination]}
+          breakpoints={{
+          
+            576:{
+              slidesPerView:3,
+              spaceBetween:20
+            },
+            992:{
+              slidesPerView:4,
+            },
+          }}
+         
+          className='my-2 my-sm-2 mx-2 w-100'
+          navigation={{
+            prevEl: ".product-detail-prev",
+            nextEl: ".product-detail-next",
+          }}
         
-          576:{
-            slidesPerView:3,
-            spaceBetween:20
-          },
-          992:{
-            slidesPerView:4,
-          },
-        }}
-       
-        className='my-2 my-sm-2 mx-2 w-100'
-        navigation={{
-          prevEl: ".product-detail-prev",
-          nextEl: ".product-detail-next",
-        }}
-      
->
-
-{product[0].images.map((item, key) => (
-<SwiperSlide key={key} className=''>
-<div
-onClick={() => handleSmallImgClick(key)}
-className={`product-details-img-item d-flex align-items-center justify-content-center p-3 rounded-2 ${
-index === key ? "product-details-img-item-selected" : ""
-}`}
->
-<Image url={item}/>
-</div>
-</SwiperSlide>
-))}
+  >
   
-</Swiper>
+  {product[0].images.map((item, key) => (
+  <SwiperSlide key={key} className=''>
+  <div
+  onClick={() => handleSmallImgClick(key)}
+  className={`product-details-img-item d-flex align-items-center justify-content-center p-3 rounded-2 ${
+  index === key ? "product-details-img-item-selected" : ""
+  }`}
+  >
+  <Image url={item}/>
+  </div>
+  </SwiperSlide>
+  ))}
+    
+  </Swiper>
+
  
-</div>
+</div>  :
+  null
+}
   </>
 }
     </div>

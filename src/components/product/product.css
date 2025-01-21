@@ -1,10 +1,11 @@
 .product-item {
   height: fit-content;
+  cursor: pointer;
   .item-top {
-    height: 200px;
+    height: 220px;
   }
   .item-top img {
-    max-height: 90%;
+    max-height: 100%;
     transition: all 0.5s ease;
   }
   .product-item-btn {
