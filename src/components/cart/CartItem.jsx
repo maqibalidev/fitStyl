@@ -23,6 +23,9 @@ if(data ){
   FavoriteToggle(data.product_id, data.name, data.img_url, data.final_price, data.rating)
 }
  } 
+ useEffect(()=>{
+  setLoading(false)
+ },[cartContext])
 
   const handleDelete = () => {
     setLoading(true)

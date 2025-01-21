@@ -23,6 +23,7 @@ export const Product = memo(
     isFavProduct = false,
     existInCart= false,
     onAddToCart,
+     loadingState,
     onToggleFavorite,
 
   }) => {
@@ -30,7 +31,7 @@ export const Product = memo(
     const originalPrice = price / (1 - offSale / 100);
     const ratingStar = Math.ceil(rating / 20);
     const remainingRatingStar = 5 - ratingStar;
-const [loading,setLoading] = useState(false);
+const [loading,setLoading] = useState(loadingState);
 
 
 useEffect(()=>{

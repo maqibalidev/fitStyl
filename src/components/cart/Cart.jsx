@@ -38,7 +38,7 @@ const Cart = () => {
         setLoading(false);
         handleApiError(err);
       });
-  }, [authContext?.data?.authToken]); // Depend on authToken for re-fetching when user changes
+  }, [authContext?.data?.authToken,cartContext.products]); 
 
   return (
     <div className="d-flex flex-column justify-content-between vh-100">

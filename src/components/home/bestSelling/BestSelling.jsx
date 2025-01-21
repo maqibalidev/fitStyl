@@ -10,6 +10,11 @@ const BestSelling = ({data}) => {
 
     const { products, addProduct } = useContext(CartContext);
     const { favProducts, addFavProduct, removeFavProduct } =useContext(favoriteContext);
+  const [loadingState,setLoadingState] = useState(false)
+
+useEffect(()=>{
+  setLoadingState(false)
+},[products])
 
 
  const { AddToCart } = useAddCart(products, addProduct); 
@@ -30,6 +35,7 @@ const BestSelling = ({data}) => {
         smallHeading="This Month"
         largeHeading="Best Selling Products"
         showBtn={true}
+        link="/products/best_selling"
       />
       <div className="product-container row gx-0 gx-sm-4 gy-2 gy-sm-5 mt-4 mt-sm-5">
         {data && data.length >0 && data.map((item, index) => (
@@ -39,6 +45,8 @@ const BestSelling = ({data}) => {
               img={item.images[0]}
               price={item.final_price}
               rating={item.rating}
+              loadingState={loadingState}
+              offSale={item.off_sale}
               title={item.name}
               exist={
                 !!favProducts.find((product) => product.id === item.id)

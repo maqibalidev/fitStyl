@@ -29,7 +29,7 @@ export const registerWithGoogleApi = async (values) => {
   return await API.post("auth/firebase/register", values);
 };
 
-export const getFlashProducts = async (offset = null, limit = null, id = null,priority=null) => {
+export const getFlashProducts = async (offset = null, limit = null, id = null,priority=null,category=null) => {
 
   const params = new URLSearchParams();
 
@@ -37,6 +37,7 @@ export const getFlashProducts = async (offset = null, limit = null, id = null,pr
   if (offset !== null) params.append("offset", offset);
   if (id !== null) params.append("id", id);
   if (priority !== null) params.append("priority", priority);
+  if (category !== null) params.append("cat", category);
   const url = `product${params.toString() ? `?${params.toString()}` : ""}`;
 
   const res = await API.get(url);

@@ -78,7 +78,7 @@ export const Root = () => {
         <Route path="/signup" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/favorites" element={<Favorites/>} />
-        <Route path="/products" element={<Products/>} />
+        <Route path="/products/:parameters?" element={<Products/>} />
         <Route path="/product?" element={<ProductDetails/>} />
         <Route path="/contact" element={<Contact/>} />
         <Route path="/account" element={<AccountPage/>} />

@@ -6,6 +6,7 @@ import "./category_section.css";
 import SkeletonComponent from '../../skeleton/Skeleton';
 import { getCategories } from '../../../services/userListingsApi';
 import { handleApiError } from '../../../helpers/errorHandler';
+import { Link } from 'react-router-dom';
 
 const CategoryItem = React.memo(({ title,icon }) => {
   
@@ -50,7 +51,9 @@ const CategorySection = ({data}) => {
 >
   {data.map((category, index) => (
     <SwiperSlide key={index}>
-      <CategoryItem title={category.name} icon={category.icon_url}/>
+      <Link to={`/products?cat=${category.id}`}>
+      <CategoryItem title={category.name} icon={category.icon_url} />
+      </Link>
     </SwiperSlide>
   ))}
 </Swiper>

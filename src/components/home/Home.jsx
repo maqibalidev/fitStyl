@@ -46,7 +46,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getFlashProducts()
+    getFlashProducts(null,null,null,1)
       .then((data) => {
         setFlashProducts(data.data);
 
@@ -58,7 +58,7 @@ const Home = () => {
             handleApiError(error);
           });
 
-        getFlashProducts()
+          getFlashProducts(null,null,null,2)
           .then((data) => {
             setBestSellingProducts(data.data);
           })
@@ -66,7 +66,7 @@ const Home = () => {
             handleApiError(error);
           });
 
-        getFlashProducts(null,100,null)
+        getFlashProducts(null,null,null,3)
           .then((data) => {
             setExploreProduct(data.data);
           })

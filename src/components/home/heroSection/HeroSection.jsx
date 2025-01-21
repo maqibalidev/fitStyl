@@ -21,7 +21,7 @@ const HeroSection = ({data,categories}) => {
             categories && categories.length > 0 ?
 
              categories.map((item,index)=>(
-              <li key={index}><Link to="#">{item.name}</Link></li>
+              <li key={index}><Link to={`/products?cat=${item.id}`}>{item.name}</Link></li>
              ))
            : <Skeleton count={6} className='w-75'/>
             }

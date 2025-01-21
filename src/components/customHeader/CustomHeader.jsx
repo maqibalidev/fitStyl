@@ -2,9 +2,9 @@ import React, { memo } from "react";
 import "./custom_header.css";
 import { CustomButton ,ArrowLEFT, ArrowRight} from "../includes/imports";
 
-const CustomHeaderComponent = ({ smallHeading, largeHeading, navBtnClass, showNav = false, showBtn = false ,isLoaded=false}) => {
+const CustomHeaderComponent = ({ smallHeading, largeHeading, navBtnClass, showNav = false, showBtn = false ,isLoaded=false,link= "#"}) => {
   return (
-    <div className="custom-header">
+    <div className="custom-header w-100">
       <h6 className="heading position-relative color-primary">{smallHeading}</h6>
       <div className="header-body d-flex justify-content-between align-items-center flex-wrap">
         <h3 className="large-heading mb-2 flex-grow-1">{largeHeading}</h3>
@@ -26,7 +26,7 @@ const CustomHeaderComponent = ({ smallHeading, largeHeading, navBtnClass, showNa
 
         {showBtn && (
           <div className="d-flex justify-content-end flex-grow-1">
-            <CustomButton text="View All" />
+            <CustomButton text="View All" link={link}/>
           </div>
         )}
       </div>

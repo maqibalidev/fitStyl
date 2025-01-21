@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 import { toast } from "react-toastify";
 import { useAddCart } from "../../../hooks/useAddCart";
 import { useFavorites } from "../../../hooks/useAddFav";
+import { CONSTANTS } from "../../../constants/constansts";
 
 const FlashSales = ({ data }) => {
   const { products, addProduct } = useContext(CartContext);
@@ -73,6 +74,7 @@ useEffect(()=>{
                   price={item.final_price}
                   rating={item.rating}
                   title={item.name}
+                  loadingState={loadingState}
                   exist={
                     !!favProducts.find((product) => product.id === item.id)
                   }
@@ -92,7 +94,7 @@ useEffect(()=>{
       </div>
 
       <div className="d-flex justify-content-center my-5">
-        <CustomButton text="View All Products" link="/products" />
+        <CustomButton text="View All Products" link={`/products/flash_sales`} />
       </div>
     </div>
   );
