@@ -36,7 +36,7 @@ export const getFlashProducts = async (offset = null, limit = null, id = null,pr
   if (limit !== null) params.append("limit", limit);
   if (offset !== null) params.append("offset", offset);
   if (id !== null) params.append("id", id);
-  if (priority !== null) params.append("priority", priority);
+  if (priority !== null && priority >= 0) params.append("priority", priority);
   if (category !== null) params.append("cat", category);
   const url = `product${params.toString() ? `?${params.toString()}` : ""}`;
 

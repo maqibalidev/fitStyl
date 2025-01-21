@@ -8,21 +8,20 @@ import { useAddCart } from "../../hooks/useAddCart";
 import { handleApiError } from "../../helpers/errorHandler";
 import SkeletonComponent from "../skeleton/Skeleton";
 import SpinnerLoader from "../includes/SpinnerLoader";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 
 const Products = () => {
   const [offset, setOffset] = useState(0);
-  const [filters, setFilters] = useState({ priority: null, catValue: null }); // Combined state
-  const [productsData, setProductsData] = useState([]);
+  const [filters, setFilters] = useState({ priority: null, catValue: null });
+  const [productsData, setProductsData] = useState(null);
   const [reachedEnd, setReachedEnd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [catData, setCatData] = useState([]);
-  const [sorting ,setSorting] = useState("asc") 
   const [categoryHeading, setCategoryHeading] = useState("All Products");
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
-
+const [loadMoreLoading,setLoadMoreLoading] = useState(false);
   const { products, addProduct } = useContext(CartContext);
   const { favProducts, addFavProduct, removeFavProduct } = useContext(favoriteContext);
   const [loadingState, setLoadingState] = useState(false);
@@ -51,6 +50,9 @@ const Products = () => {
 
   // Fetch products API
   const fetchProducts = useCallback(() => {
+    // Prevent fetching if priority is null or undefined
+    if (filters.priority === null) return;
+
     setLoading(true);
 
     if (offset === 0) {
@@ -79,12 +81,12 @@ const Products = () => {
     setOffset(0); // Reset offset
 
     if (cat_id === "all") {
-      setFilters((prev) => ({ ...prev, catValue: null }));
+      setFilters((prev) => ({ ...prev, catValue: null, priority: -1 }));
       setCategoryHeading("All Products");
       navigate(`/products?cat=all`);
     } else {
       const selectedCategory = catData.find((cat) => cat.id === cat_id);
-      setFilters((prev) => ({ ...prev, catValue: cat_id }));
+      setFilters((prev) => ({ ...prev, catValue: cat_id, priority: -1 }));
       setCategoryHeading(selectedCategory.name);
       navigate(`/products?cat=${cat_id}`);
     }
@@ -92,18 +94,18 @@ const Products = () => {
 
   // Handle query parameter for category
   useEffect(() => {
+    console.log(filters.priority)
     const queryParams = new URLSearchParams(location.search);
     const categoryFromQuery = queryParams.get("cat");
 
     if (categoryFromQuery) {
-      setFilters((prev) => ({ ...prev, priority: null }));
       if (categoryFromQuery === "all") {
-        setFilters((prev) => ({ ...prev, priority: null, catValue: null }));
+        setFilters((prev) => ({ ...prev, priority: -1, catValue: null }));
         setCategoryHeading("All Products");
       } else {
         const selectedCategory = catData.find((cat) => cat.id === categoryFromQuery);
         if (selectedCategory) {
-          setFilters((prev) => ({ ...prev, catValue: categoryFromQuery }));
+          setFilters((prev) => ({ ...prev, catValue: categoryFromQuery, priority: -1 }));
           setCategoryHeading(selectedCategory.name);
         }
       }
@@ -119,7 +121,7 @@ const Products = () => {
       setFilters((prev) => ({ ...prev, priority: 2 }));
       setCategoryHeading("Best Selling Products");
     } else if (params.parameters === "all") {
-      setFilters((prev) => ({ ...prev, priority: null }));
+      setFilters((prev) => ({ ...prev, priority: -1 }));
       setCategoryHeading("All Products");
     }
   }, [params]);
@@ -131,6 +133,7 @@ const Products = () => {
 
   // Fetch products whenever filters or offset changes
   useEffect(() => {
+    setLoading(true)
     fetchProducts();
   }, [filters, offset, fetchProducts]);
 
@@ -169,7 +172,7 @@ const Products = () => {
               name="cat-filter"
               value={filters.catValue || "all"}
               onChange={(e) => handleOptionClick(e.target.value)}
-              className="form-select shadow-none form-select-md"
+              className="form-select shadow-none form-select-md product-view-select-filter"
               aria-label=".form-select-lg example"
             >
               <option value="all">All</option>
@@ -182,7 +185,7 @@ const Products = () => {
             </select>
 
             {/* Price Filter */}
-            <select onChange={(e)=>handleSortClick(e.target.value)} className="form-select shadow-none form-select-md" aria-label=".form-select-lg example">
+            <select onChange={(e) => handleSortClick(e.target.value)} className="form-select product-view-select-filter shadow-none form-select-md" aria-label=".form-select-lg example">
               <option selected disabled>
                 Filter Price
               </option>
@@ -191,10 +194,11 @@ const Products = () => {
             </select>
           </div>
         </div>
-
+     
         <div className="row my-4 ">
           {/* Products Grid */}
-          {productsData && productsData.length > 0 ? (
+          
+            {productsData && productsData.length > 0  ? (
             productsData.map((item, key) => (
               <div className="col-12 col-sm-4 col-lg-3" key={key}>
                 <Product
@@ -214,9 +218,21 @@ const Products = () => {
               </div>
             ))
           ) : (
-           <div className="d-flex justify-content-center w-100 row mx-auto">
-             <SkeletonComponent count={4} showTiles={true} height={150} />
-           </div>
+           <>
+           {!loading ? <div className="d-flex justify-content-center my-5 flex-column align-items-center gap-4">
+            <h4>No Products available for this category!</h4>
+            <Link
+              to="/"
+              className="btn btn-transparent border rounded-2 col-12 col-sm-5 p-3 border-1 border-dark my-2"
+            >
+              Return To Shop
+            </Link>
+          </div>:
+          <div className="d-flex justify-content-center w-100 row mx-auto">
+          <SkeletonComponent count={4} showTiles={true} height={150} />
+        </div>
+          }
+           </>
           )}
         </div>
 

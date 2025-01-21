@@ -76,3 +76,6 @@
     background: rgba(255, 166, 0, 0.425);
     color: #fff;
   }
+  .product-view-select-filter{
+    min-width: 140px !important;
+  }
