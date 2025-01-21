@@ -96,6 +96,7 @@ const Products = () => {
     const categoryFromQuery = queryParams.get("cat");
 
     if (categoryFromQuery) {
+      setFilters((prev) => ({ ...prev, priority: null }));
       if (categoryFromQuery === "all") {
         setFilters((prev) => ({ ...prev, priority: null, catValue: null }));
         setCategoryHeading("All Products");
