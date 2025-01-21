@@ -1,44 +1,39 @@
-import React, { useState, memo } from "react";
-import { AddIcon, EyeIcon, FavoriteIcon, SubtractIcon } from "../includes/imports";
+import React, { useState, memo, useContext, useEffect } from "react";
+import { AddIcon, AuthContext, EyeIcon, favoriteContext, FavoriteIcon, Loader, SubtractIcon } from "../includes/imports";
 import Swal from "sweetalert2";
 import "../product/product.css";
-export const CartItem = memo(({ data, availability_status = 0, cartContext,favContext }) => {
-  const [quantity, setQuantity] = useState(data?.quantity || 1);
-
-  const existFav = favContext.favProducts.find((product) => product === data.id);
+import { useFavorites } from "../../hooks/useAddFav";
+import { removeCartItems } from "../../services/userListingsApi";
+import { handleApiError } from "../../helpers/errorHandler";
+import SpinnerLoader from "../includes/SpinnerLoader";
+import { Link } from "react-router-dom";
+export const CartItem = memo(({ data, availability_status = 0, cartContext,existFavorites }) => {
+  const [quantity, setQuantity] = useState(parseInt(data?.quantity) || 1);
+const [loading,setLoading] = useState(false)
+ 
+ const authContext = useContext(AuthContext);
+  const { favProducts, addFavProduct, removeFavProduct } =useContext(favoriteContext);
+  const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
   const handleChange = (quantity) => {
     cartContext.updateProduct(data.id, quantity);
   };
-  const handleFavClick = ()=>{
-    if (!existFav) {
-      favContext.addFavProduct(data.id);
-    }
-    else{
-      favContext.removeFavProduct(data.id)
-    }
-  }
+
+ const handleFavClick = ()=>{
+if(data ){
+  FavoriteToggle(data.product_id, data.name, data.img_url, data.final_price, data.rating)
+}
+ } 
+
   const handleDelete = () => {
-    if (availability_status > 0 && availability_status !== 3 && availability_status !== 2) {
-      Swal.fire({
-        title: "Are You Sure You want to Remove?",
-        icon: "warning",
-        text: "Removing this product will revert the availability checking process!",
-        showCancelButton: true,
-        confirmButtonText: "Yes, Remove it!",
-        cancelButtonText: "Cancel",
-        draggable: true,
-        customClass: {
-          confirmButton: "my-confirm-button",
-          cancelButton: "my-cancel-button",
-        },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          cartContext.removeProduct(data.id);
-        }
-      });
-    } else {
-      cartContext.removeProduct(data.id);
-    }
+    setLoading(true)
+ removeCartItems({product_id:data.product_id},authContext.data.authToken).then((res)=>{
+ cartContext.removeProduct(data.product_id);
+setLoading(false)
+ }).catch((err)=>{
+  setLoading(false)
+  handleApiError(err)
+ })
+
   };
 
   const handleIncrement = () => {
@@ -53,23 +48,17 @@ export const CartItem = memo(({ data, availability_status = 0, cartContext,favCo
     }
   };
 
-  const handleAvailabilityClick = () => {
-    if (availability_status === 0) {
-      Swal.fire({
-        title: "Thank you for your interest!",
-        icon: "success",
-        text: "We'll notify you via email about the availability, availability status will be updated here.",
-        draggable: true,
-        customClass: {
-          confirmButton: "my-confirm-button",
-        },
-      });
-    }
-  };
 
   return (
-    <div className="product-item position-relative col-12 col-sm-4 col-lg-3">
-      {availability_status !== 0 && (
+    <div className="product-item position-relative col-12 col-sm-4 col-lg-3 ">
+     
+   <div className="position-relative">
+ {loading &&   <div  className="cart-item-loader position-absolute top-0 left-0  w-100 h-100 pb-5 d-flex align-items-center justify-content-center">
+     <div className="relative w-100 h-100 d-flex align-items-center justify-content-center pb-5">
+     <SpinnerLoader/>
+     </div>
+      </div>}
+   {availability_status !== 0 && (
         <span
           className={`sale z-1 top-0 left-0 m-2 
             ${availability_status === 1 && "bg-secondary"}
@@ -83,15 +72,17 @@ export const CartItem = memo(({ data, availability_status = 0, cartContext,favCo
         </span>
       )}
       <span className="z-1 action-btns end-0 m-2 position-absolute top-0 d-flex flex-column gap-2">
-    <button onClick={handleFavClick} className={`bg-color-light ${existFav && "product-fav-icon-active "} bg-color-light rounded-circle border-0 mx-3 d-flex align-items-center justify-content-center`}>
+    <button onClick={handleFavClick} className={`bg-color-light ${existFavorites && "product-fav-icon-active "} bg-color-light rounded-circle border-0 mx-1 d-flex align-items-center justify-content-center`}>
            <FavoriteIcon />
          </button>
-        <button className="bg-color-light rounded-circle border-0 mx-3 d-flex align-items-center justify-content-center ">
+        <Link to={`/product?id=${data.product_id}`} className="bg-color-light rounded-circle border-0 mx-1 d-flex align-items-center justify-content-center ">
           <EyeIcon />
-        </button>
+        </Link>
       </span>
-      <div className="item-top p-4 rounded-1 overflow-hidden  bg-color-lightgrey d-flex justify-content-center align-items-center position-relative">
-        <img className="object-fit-contain w-90" src={data?.img || ""} alt="" />
+      <div>
+      <div className="item-top p-4  rounded-1 overflow-hidden  bg-color-lightgrey d-flex justify-content-center align-items-center position-relative">
+   
+        <img className="object-fit-contain w-90" src={data?.img_url || ""} alt="" />
 
         <button
           onClick={handleDelete}
@@ -100,10 +91,12 @@ export const CartItem = memo(({ data, availability_status = 0, cartContext,favCo
           Remove From Cart
         </button>
       </div>
-      <div className="item-body py-3">
+      </div>
+      <div className="item-body py-3 ">
+  
         <span className="title d-block mb-1 fw-medium">{data?.name || ""}</span>
         <span className="prices color-primary fw-medium d-flex justify-content-between align-items-center">
-          ${data?.price || 0}
+          ${data?.final_price || 0}
         </span>
 
         <div className={`quantity-sec d-flex my-2 ${availability_status === 3 && "d-none"}`}>
@@ -132,18 +125,14 @@ export const CartItem = memo(({ data, availability_status = 0, cartContext,favCo
           </div>
           <span className="prices color-primary fw-medium d-flex justify-content-between align-items-center gap-2">
             <span className="fw-medium text-dark ps-2 ">Subtotal:</span>$
-            {quantity * data?.price || 0}
+            {quantity * data?.final_price || 0}
           </span>
         </div>
-        {availability_status === 0 && (
-          <button
-            onClick={handleAvailabilityClick}
-            className="btn btn-success rounded-1 bg-color-green border-0 w-100 mt-3"
-          >
-            Check Availability
-          </button>
-        )}
+       
       </div>
+
+
+   </div>
     </div>
   );
 });

@@ -57,3 +57,7 @@ div:where(.swal2-icon).swal2-warning {
 .swal-desc-class{
   font-size: 14px !important;
 }
+
+.cart-item-loader{
+  z-index: 200;
+}

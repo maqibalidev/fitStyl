@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext"; 
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 
 export const useFavorites = ( favProducts, addFavProduct, removeFavProduct) => {
   const authContext = useContext(AuthContext); 

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://fitstylbackedn-production.up.railway.app/api/v1/",
+  baseURL: process.env.REACT_APP_BACKEND_API_URL,
   // baseURL:"http://192.168.0.106:8000/api/v1/",
   timeout: 30000,
 });
@@ -29,14 +29,14 @@ export const registerWithGoogleApi = async (values) => {
   return await API.post("auth/firebase/register", values);
 };
 
-export const getFlashProducts = async (offset = null, limit = null, id = null) => {
+export const getFlashProducts = async (offset = null, limit = null, id = null,priority=null) => {
 
   const params = new URLSearchParams();
 
   if (limit !== null) params.append("limit", limit);
   if (offset !== null) params.append("offset", offset);
   if (id !== null) params.append("id", id);
-
+  if (priority !== null) params.append("priority", priority);
   const url = `product${params.toString() ? `?${params.toString()}` : ""}`;
 
   const res = await API.get(url);
@@ -87,7 +87,18 @@ export const getMessages = async (id) => {
 export const uploadExcel = async (values, token) => {
   return await API.post("user/upload", values, authHeader(token, true));
 };
-
+export const getCartItems = async (token) => {
+  return await API.get("cart", { headers: authHeader(token)});
+};
+export const addCartItems = async (values,token) => {
+  return await API.post("cart", values, {headers: authHeader(token, false)});
+};
+export const updateCartItems = async (values,token) => {
+  return await API.post("cart/update", values, {headers: authHeader(token, false)});
+};
+export const removeCartItems = async (values,token) => {
+  return await API.post("cart/remove", values, {headers: authHeader(token, false)});
+};
 // export const logoutApi = async(token) => {
 //   return API.post(
 //     "logout",

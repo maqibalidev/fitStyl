@@ -19,18 +19,16 @@ function App() {
   const router = createBrowserRouter([{ path: "*", element: <Root /> }]);
   return (
     <AuthProvider>
-     
         <FavoriteProvider>
           <CartProvider>
             <ToastContainer autoClose={2000} toastClassName="toast-class" />
-            <SkeletonTheme baseColor="#d2d2d2" highlightColor="#e5e5e5">
-            <SocketProvider>
-            <RouterProvider router={router} />
+             <SkeletonTheme baseColor="#d2d2d2" highlightColor="#e5e5e5">
+             <SocketProvider>
+             <RouterProvider router={router}/>
               </SocketProvider>
             </SkeletonTheme>
           </CartProvider>
         </FavoriteProvider>
-     
     </AuthProvider>
   );
 }

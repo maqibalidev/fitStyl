@@ -71,8 +71,7 @@ export const Root = () => {
        <Loader/>
       }
       >
-      <Routes>
-   
+      <Routes>   
        <Route path="/" element={<HomePage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
@@ -85,8 +84,7 @@ export const Root = () => {
         <Route path="/account" element={<AccountPage/>} />
         <Route path="/reset-password?" element={<ResetPass/>} />
         <Route path="/verify?" element={<VerifyPage/>} />
-        <Route path="*" element={<NotFoundPage />} />
-   
+        <Route path="*" element={<NotFoundPage />} />  
       </Routes>
     </Suspense>
   );

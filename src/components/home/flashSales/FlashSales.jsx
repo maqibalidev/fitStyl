@@ -1,4 +1,4 @@
-import React, { memo, useContext } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { CustomHeader, CustomButton, Product, AuthContext } from "../../includes/imports";
@@ -15,12 +15,21 @@ const FlashSales = ({ data }) => {
   const { favProducts, addFavProduct, removeFavProduct } =useContext(favoriteContext);
   const { AddToCart } = useAddCart(products, addProduct); 
   const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
+  const [loadingState,setLoadingState] = useState(false)
+
+useEffect(()=>{
+  setLoadingState(false)
+},[products])
+
+
   const handleAddToCart = (id) => {
-    AddToCart(id);
+ AddToCart(id);
+
   };
 
   const handleFavoriteToggle = (id, title, img, price, rating) => {
     FavoriteToggle(id, title, img, price, rating)
+  
   };
 
   const swiperConfig = {
@@ -67,6 +76,7 @@ const FlashSales = ({ data }) => {
                   exist={
                     !!favProducts.find((product) => product.id === item.id)
                   }
+                  existInCart = {!!products.find((product)=>product.id === item.id)}
                   onAddToCart={handleAddToCart}
                   onToggleFavorite={handleFavoriteToggle}
                 />

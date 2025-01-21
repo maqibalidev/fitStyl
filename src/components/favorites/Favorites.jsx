@@ -2,26 +2,24 @@ import React, { useContext, useEffect, useState } from 'react'
 import { CartContext, favoriteContext, Footer, Header, Product } from '../includes/imports'
 import { productData } from '../../assets/data';
 import { Link } from 'react-router-dom';
+import { useAddCart } from '../../hooks/useAddCart';
+import { useFavorites } from '../../hooks/useAddFav';
 
 const Favorites = () => {
      const { products, addProduct } = useContext(CartContext);
      const { favProducts, addFavProduct, removeFavProduct ,clearFavorites} =useContext(favoriteContext);
      console.log(favProducts)
-   const handleAddToCart = (id) => {
-     const exist = products.find((product) => product.id === id);
-     if (!exist) {
-       addProduct(id);
-     }
-   };
- 
-   const handleFavoriteToggle = (id, title, img, price, rating) => {
-     const existFav = favProducts.find((product) => product.id === id);
-     if (!existFav) {
-       addFavProduct(id, title, img, price, rating);
-     } else {
-       removeFavProduct(id);
-     }
-   };
+ const { AddToCart } = useAddCart(products, addProduct); 
+  const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
+  const handleAddToCart = (id) => {
+    AddToCart(id);
+  };
+
+  const handleFavoriteToggle = (id, title, img, price, rating) => {
+    FavoriteToggle(id, title, img, price, rating)
+  };
+
+
 
   return (
     <div className='d-flex flex-column justify-content-between vh-100'>
@@ -43,6 +41,7 @@ const Favorites = () => {
                 exist={
                   !!favProducts.find((product) => product.id === item.id)
                 }
+                existInCart = {!!products.find((product)=>product.id === item.id)}
                 isFavProduct={true}
                 onAddToCart={handleAddToCart}
                 onToggleFavorite={handleFavoriteToggle}

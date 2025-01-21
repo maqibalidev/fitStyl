@@ -10,6 +10,8 @@ const BestSelling = ({data}) => {
 
     const { products, addProduct } = useContext(CartContext);
     const { favProducts, addFavProduct, removeFavProduct } =useContext(favoriteContext);
+
+
  const { AddToCart } = useAddCart(products, addProduct); 
   const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
   const handleAddToCart = (id) => {
@@ -41,6 +43,7 @@ const BestSelling = ({data}) => {
               exist={
                 !!favProducts.find((product) => product.id === item.id)
               }
+              existInCart = {!!products.find((product)=>product.id === item.id)}
               onAddToCart={handleAddToCart}
               onToggleFavorite={handleFavoriteToggle}
        

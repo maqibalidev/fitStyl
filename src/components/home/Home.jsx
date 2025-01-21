@@ -66,7 +66,7 @@ const Home = () => {
             handleApiError(error);
           });
 
-        getFlashProducts()
+        getFlashProducts(null,100,null)
           .then((data) => {
             setExploreProduct(data.data);
           })
