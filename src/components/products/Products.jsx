@@ -9,6 +9,7 @@ import { handleApiError } from "../../helpers/errorHandler";
 import SkeletonComponent from "../skeleton/Skeleton";
 import SpinnerLoader from "../includes/SpinnerLoader";
 import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Products = () => {
   const [offset, setOffset] = useState(0);
@@ -21,7 +22,6 @@ const Products = () => {
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
-const [loadMoreLoading,setLoadMoreLoading] = useState(false);
   const { products, addProduct } = useContext(CartContext);
   const { favProducts, addFavProduct, removeFavProduct } = useContext(favoriteContext);
   const [loadingState, setLoadingState] = useState(false);
@@ -29,9 +29,15 @@ const [loadMoreLoading,setLoadMoreLoading] = useState(false);
   const { AddToCart } = useAddCart(products, addProduct);
   const { FavoriteToggle } = useFavorites(favProducts, addFavProduct, removeFavProduct);
 
-  const handleAddToCart = (id) => {
-    AddToCart(id);
+  const handleAddToCart = async (id) => {
+    try {
+      return await AddToCart(id); 
+    } catch (error) {
+      console.error("Add to cart failed:", error);
+      toast.error("Unable to add product to cart.");
+    }
   };
+  
 
   const handleFavoriteToggle = (id, title, img, price, rating) => {
     FavoriteToggle(id, title, img, price, rating);
@@ -58,8 +64,8 @@ const [loadMoreLoading,setLoadMoreLoading] = useState(false);
     if (offset === 0) {
       setProductsData([]); // Reset products when offset is 0
     }
-
-    getFlashProducts(offset * 10, null, null, filters.priority, filters.catValue)
+    console.log(offset)
+    getFlashProducts(offset, null, null, filters.priority, filters.catValue)
       .then((res) => {
         if (res.data.length > 0) {
           setProductsData((prev) => (offset === 0 ? res.data : [...prev, ...res.data]));
@@ -91,6 +97,13 @@ const [loadMoreLoading,setLoadMoreLoading] = useState(false);
       navigate(`/products?cat=${cat_id}`);
     }
   };
+
+const handleViewAllClick = ()=>{
+  setProductsData([]); // Reset products list on filter change
+  setReachedEnd(false);
+  setOffset(0); // Reset offset
+  navigate("/products?cat=all")
+}
 
   // Handle query parameter for category
   useEffect(() => {
@@ -138,7 +151,7 @@ const [loadMoreLoading,setLoadMoreLoading] = useState(false);
   }, [filters, offset, fetchProducts]);
 
   const handleLoadMoreClick = () => {
-    setOffset((prev) => prev + 1);
+    setOffset((prev) => (prev + 1));
   };
 
   const handleSortClick = (sortValue) => {
@@ -220,13 +233,13 @@ const [loadMoreLoading,setLoadMoreLoading] = useState(false);
           ) : (
            <>
            {!loading ? <div className="d-flex justify-content-center my-5 flex-column align-items-center gap-4">
-            <h4>No Products available for this category!</h4>
-            <Link
-              to="/"
+            <h4 className="text-center">No Products available for this category!</h4>
+            <div
+              onClick={handleViewAllClick}
               className="btn btn-transparent border rounded-2 col-12 col-sm-5 p-3 border-1 border-dark my-2"
             >
-              Return To Shop
-            </Link>
+              View All Products
+            </div>
           </div>:
           <div className="d-flex justify-content-center w-100 row mx-auto">
           <SkeletonComponent count={4} showTiles={true} height={150} />

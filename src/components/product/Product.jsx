@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import "./product.css";
 import {
   EyeIcon,
@@ -7,9 +7,11 @@ import {
   Image,
   CancelIcon,
   CartIcon,
+  CartContext,
 } from "../includes/imports";
 import { Link, useNavigate } from "react-router-dom";
 import SpinnerLoader from "../includes/SpinnerLoader";
+import { toast } from "react-toastify";
 
 export const Product = memo(
   ({
@@ -24,7 +26,6 @@ export const Product = memo(
     isFavProduct = false,
     existInCart= false,
     onAddToCart,
-     loadingState,
     onToggleFavorite,
 
   }) => {
@@ -32,7 +33,7 @@ export const Product = memo(
     const originalPrice = price / (1 - offSale / 100);
     const ratingStar = Math.ceil(rating / 20);
     const remainingRatingStar = 5 - ratingStar;
-const [loading,setLoading] = useState(loadingState);
+const [loading,setLoading] = useState(false);
 
 
 useEffect(()=>{
@@ -41,15 +42,25 @@ setLoading(false)
 
 
 
-const handleCartIconClick = (e)=>{
+const handleCartIconClick = async (e) => {
   e.stopPropagation();
- if(existInCart){
-  navigate("/cart")
- }else{
-  setLoading(true)
-  onAddToCart(id)
- }
-}
+
+  if (existInCart) {
+    navigate("/cart");
+  } else {
+    setLoading(true); // Show the spinner
+    try {
+      setLoading(true);
+      await onAddToCart(id); // Wait for AddToCart to complete
+    } catch (error) {
+      setLoading(false); // Hide the spinner regardless of success or failure
+      console.error("Failed to add to cart:", error);
+      toast.error("Failed to add product to cart. Please try again.");
+    }
+  }
+};
+
+
 
 
 const handleProductClick = (e)=>{
@@ -66,11 +77,6 @@ const handleFavoriteClick = (e)=>{
     return (
       <div onClick={(e)=>handleProductClick(e)}  className="product-item position-relative w-100">
            <div className="position-relative">
- {loading &&   <div  className="cart-item-loader position-absolute top-0 left-0 pb-5 w-100 h-100  d-flex align-items-center justify-content-center">
-     <div className="relative w-100 h-100 d-flex align-items-center justify-content-center pb-5">
-     <SpinnerLoader/>
-     </div>
-      </div>}
         {offSale > 0 && (
           <span className="sale z-1 top-0 left-0 m-2 bg-color-orange color-light rounded-1 position-absolute">
             -{offSale}%
@@ -93,10 +99,14 @@ const handleFavoriteClick = (e)=>{
     </button>
        }
         <button
+        disabled={loading}
         onClick={(e)=>handleCartIconClick(e)}
           className={`bg-color-light  rounded-circle border-0 d-flex align-items-center justify-content-center ${existInCart && "product-fav-icon-active "}`}
         >
-          <CartIcon />
+         {
+          loading ? <div className="cart-spinner"> </div> :  <CartIcon />
+         }
+         
         </button>
       </span>
         <div className="item-top p-2 rounded-1 overflow-hidden bg-color-lightgrey d-flex justify-content-center align-items-center position-relative">

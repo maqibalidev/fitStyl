@@ -23,15 +23,13 @@ if(data ){
   FavoriteToggle(data.product_id, data.name, data.img_url, data.final_price, data.rating)
 }
  } 
- useEffect(()=>{
-  setLoading(false)
- },[cartContext])
+
 
   const handleDelete = () => {
     setLoading(true)
  removeCartItems({product_id:data.product_id},authContext.data.authToken).then((res)=>{
- cartContext.removeProduct(data.product_id);
-setLoading(false)
+  cartContext.removeProduct(data.product_id);
+  setLoading(false)
  }).catch((err)=>{
   setLoading(false)
   handleApiError(err)
@@ -51,7 +49,9 @@ setLoading(false)
     }
   };
 
-
+  // useEffect(()=>{
+  //   setLoading(false)
+  //  },[cartContext])
   return (
     <div className="product-item position-relative col-12 col-sm-4 col-lg-3 ">
      
@@ -89,6 +89,7 @@ setLoading(false)
 
         <button
           onClick={handleDelete}
+          disabled={loading}
           className="text-light position-absolute product-item-btn  bg-danger w-100 p-2 border-0"
         >
           Remove From Cart
