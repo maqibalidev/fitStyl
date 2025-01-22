@@ -18,7 +18,7 @@ useEffect(()=>{
   
    const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
    const handleAddToCart = (id) => {
-     AddToCart(id);
+   return  AddToCart(id);
    };
  
    const handleFavoriteToggle = (id, title, img, price, rating) => {
@@ -44,7 +44,7 @@ useEffect(()=>{
                     exist={
                       !!favProducts.find((product) => product.id === item.id)
                     }
-                    existInCart = {!!products.find((product)=>product.id === item.id)}
+                    existInCart = {!!products.find((product)=>product === item.id)}
                     onAddToCart={handleAddToCart}
                     onToggleFavorite={handleFavoriteToggle}
              

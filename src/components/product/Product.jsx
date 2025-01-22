@@ -34,28 +34,37 @@ export const Product = memo(
     const ratingStar = Math.ceil(rating / 20);
     const remainingRatingStar = 5 - ratingStar;
 const [loading,setLoading] = useState(false);
-
+const {products,isLoading} = useContext(CartContext);
+const [existCart ,setExistCart] = useState(false);
 
 useEffect(()=>{
-setLoading(false)
-},[existInCart])
+  setLoading(false)
+},[existCart])
+
+
+useEffect(() => {
+  const exists = products.some((item) => item === id);
+  console.log(products)
+  setExistCart(exists); 
+  console.log("Product exists in cart:", exists);
+}, [products, id]); // Dependency array includes `products` and `id`
 
 
 
 const handleCartIconClick = async (e) => {
   e.stopPropagation();
 
-  if (existInCart) {
+  if (existCart) {
     navigate("/cart");
   } else {
-    setLoading(true); // Show the spinner
+    setLoading(true); 
     try {
       setLoading(true);
-      await onAddToCart(id); // Wait for AddToCart to complete
+      await onAddToCart(id); 
+     
     } catch (error) {
       setLoading(false); // Hide the spinner regardless of success or failure
       console.error("Failed to add to cart:", error);
-      toast.error("Failed to add product to cart. Please try again.");
     }
   }
 };
@@ -101,7 +110,7 @@ const handleFavoriteClick = (e)=>{
         <button
         disabled={loading}
         onClick={(e)=>handleCartIconClick(e)}
-          className={`bg-color-light  rounded-circle border-0 d-flex align-items-center justify-content-center ${existInCart && "product-fav-icon-active "}`}
+          className={`bg-color-light  rounded-circle border-0 d-flex align-items-center justify-content-center ${existCart && "product-fav-icon-active "}`}
         >
          {
           loading ? <div className="cart-spinner"> </div> :  <CartIcon />

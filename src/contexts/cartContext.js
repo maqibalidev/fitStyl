@@ -1,58 +1,124 @@
-import { createContext, useReducer } from "react";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
+import {
+  addCartItems,
+  getCartItems,
+  removeCartItems,
+} from "../services/userListingsApi";
+import { AuthContext } from "./AuthContext";
+import { handleApiError } from "../helpers/errorHandler";
+import { toast } from "react-toastify";
+
+// Reducer for Cart State
 const cartReducer = (state, action) => {
   switch (action.type) {
+    case "SET_CART":
+      // Ensure payload is directly an array of IDs
+      return action.payload;
+
     case "ADD_PRODUCT":
-      const updatedCart = [...state,{id: action.payload.id,quantity:1}];
-      localStorage.setItem("cartData", JSON.stringify(updatedCart));
-      return updatedCart;
+      return [...state, action.payload.id];
 
     case "REMOVE_PRODUCT":
-      const filteredCart = state.filter(
-        (product) => product.id !== action.payload.id
-      );
-      localStorage.setItem("cartData", JSON.stringify(filteredCart));
-      return filteredCart;
+      return state.filter((productId) => productId !== action.payload.id);
 
-    case "UPDATE_PRODUCT":
-      const updated = state.map((item) =>
-        item.id === action.payload.id
-          ? { ...item, quantity: action.payload.quantity }
-          : item
-      );
-      localStorage.setItem("cartData", JSON.stringify(updated));
-      return updated;
     case "CLEAR_CART":
-      console.log("clear cart is calling")
-      localStorage.setItem("cartData", JSON.stringify([]));
       return [];
 
     default:
       return state;
   }
 };
-const INITIALS = JSON.parse(localStorage.getItem("cartData")) || [];
 
+// Reducer for Loader State
+const loaderReducer = (state, action) => {
+  switch (action.type) {
+    case "SHOW_LOADER":
+      return { isLoading: true };
+
+    case "HIDE_LOADER":
+      return { isLoading: false };
+
+    default:
+      return state;
+  }
+};
+
+// Context Creation
 export const CartContext = createContext();
+
+// Provider Component
 export const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, INITIALS
-);
+  const { data } = useContext(AuthContext); // Fetch auth context
 
+  const [cartState, cartDispatch] = useReducer(cartReducer, []); // Initial cart state as empty array
+  const [loaderState, loaderDispatch] = useReducer(loaderReducer, {
+    isLoading: false,
+  });
 
-  const addProduct = (id) =>
-    dispatch({ type: "ADD_PRODUCT", payload: { id } });
-  const removeProduct = (id) =>
-    dispatch({ type: "REMOVE_PRODUCT", payload: { id } });
-  const updateProduct = (id, quantity) =>
-    dispatch({ type: "UPDATE_PRODUCT", payload: { id, quantity } });
-  const clearCart = () => dispatch({ type: "CLEAR_CART" });
+  // Load Initial Cart Data
+  useEffect(() => {
+    if (!data?.authToken) return;
+
+    const fetchCart = async () => {
+      loaderDispatch({ type: "SHOW_LOADER" }); // Show loader
+      try {
+        const res = await getCartItems(data.authToken);
+        if (res?.data?.length) {
+          // Extract only the `id` from each item
+          const cartIds = res.data.map((item) => item.product_id);
+          cartDispatch({ type: "SET_CART", payload: cartIds });
+        }
+      } catch (err) {
+        console.error("Cart fetch error: ", err);
+        handleApiError(err);
+      } finally {
+        loaderDispatch({ type: "HIDE_LOADER" }); // Hide loader
+      }
+    };
+
+    fetchCart();
+  }, [data?.authToken]);
+
+  // Action Creators
+  const addProduct = async (id, quantity) => {
+    loaderDispatch({ type: "SHOW_LOADER" }); // Show loader
+    try {
+      await addCartItems({ product_id: id, quantity }, data.authToken);
+      cartDispatch({ type: "ADD_PRODUCT", payload: { id, quantity } });
+      toast.success("Product added to cart!", { position: "top-center" });
+    } catch (err) {
+      console.error("Add product error: ", err);
+      handleApiError(err);
+    } finally {
+      loaderDispatch({ type: "HIDE_LOADER" }); // Hide loader
+    }
+  };
+
+  const removeProduct = async (id) => {
+    loaderDispatch({ type: "SHOW_LOADER" }); // Show loader
+    try {
+      await removeCartItems({ product_id: id }, data.authToken);
+      cartDispatch({ type: "REMOVE_PRODUCT", payload: { id } });
+    } catch (err) {
+      console.error("Remove product error: ", err);
+      handleApiError(err);
+    } finally {
+      loaderDispatch({ type: "HIDE_LOADER" }); // Hide loader
+    }
+  };
+
+  const clearCart = () => {
+    cartDispatch({ type: "CLEAR_CART" });
+  };
+
   return (
     <CartContext.Provider
       value={{
-        products: state,
+        products: cartState,
         addProduct,
         removeProduct,
-        updateProduct,
         clearCart,
+        isLoading: loaderState.isLoading,
       }}
     >
       {children}

@@ -29,13 +29,9 @@ const Products = () => {
   const { AddToCart } = useAddCart(products, addProduct);
   const { FavoriteToggle } = useFavorites(favProducts, addFavProduct, removeFavProduct);
 
-  const handleAddToCart = async (id) => {
-    try {
-      return await AddToCart(id); 
-    } catch (error) {
-      console.error("Add to cart failed:", error);
-      toast.error("Unable to add product to cart.");
-    }
+  const handleAddToCart = (id) => {
+      return  AddToCart(id); 
+  
   };
   
 

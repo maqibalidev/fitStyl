@@ -1,5 +1,5 @@
 import React, { useState, memo, useContext, useEffect } from "react";
-import { AddIcon, AuthContext, EyeIcon, favoriteContext, FavoriteIcon, Loader, SubtractIcon } from "../includes/imports";
+import { AddIcon, AuthContext, CartContext, EyeIcon, favoriteContext, FavoriteIcon, Loader, SubtractIcon } from "../includes/imports";
 import Swal from "sweetalert2";
 import "../product/product.css";
 import { useFavorites } from "../../hooks/useAddFav";
@@ -10,8 +10,7 @@ import { Link } from "react-router-dom";
 export const CartItem = memo(({ data, availability_status = 0, cartContext,existFavorites }) => {
   const [quantity, setQuantity] = useState(parseInt(data?.quantity) || 1);
 const [loading,setLoading] = useState(false)
- 
- const authContext = useContext(AuthContext);
+const {isLoading,products} = useContext(CartContext);
   const { favProducts, addFavProduct, removeFavProduct } =useContext(favoriteContext);
   const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
   const handleChange = (quantity) => {
@@ -24,16 +23,13 @@ if(data ){
 }
  } 
 
+useEffect(()=>{
+  setLoading(isLoading)
+},[products])
 
   const handleDelete = () => {
     setLoading(true)
- removeCartItems({product_id:data.product_id},authContext.data.authToken).then((res)=>{
-  cartContext.removeProduct(data.product_id);
-  setLoading(false)
- }).catch((err)=>{
-  setLoading(false)
-  handleApiError(err)
- })
+ cartContext.removeProduct(data.product_id);
 
   };
 
@@ -49,9 +45,6 @@ if(data ){
     }
   };
 
-  // useEffect(()=>{
-  //   setLoading(false)
-  //  },[cartContext])
   return (
     <div className="product-item position-relative col-12 col-sm-4 col-lg-3 ">
      
