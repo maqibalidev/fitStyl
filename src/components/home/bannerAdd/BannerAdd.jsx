@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import "./banner_add.css";
-import demo1 from "../../../assets/images/JBL_BOOMBOX_2_HERO_020_x1 (1) 1.png"
 import {CustomButton} from '../../includes/imports';
 import SkeletonComponent from '../../skeleton/Skeleton';
 const BannerAdd = ({data}) => {

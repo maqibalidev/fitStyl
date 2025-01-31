@@ -1,6 +1,6 @@
 import React from "react";
 import "./about_section.css";
-import { AboutIcon1 } from "../../includes/imports";
+import { AboutIcon1, ProtectedIcon, SupportIcon } from "../../includes/imports";
 
 
 const AboutItem = React.memo(({ icon: Icon, title, description }) => (
@@ -16,9 +16,9 @@ const AboutItem = React.memo(({ icon: Icon, title, description }) => (
 const AboutSection = () => {
 
   const aboutData = [
-    { id: 1, icon: AboutIcon1, title: "FAST Delivery", description: "Lorem ipsum dolor sit amet." },
-    { id: 2, icon: AboutIcon1, title: "Secure Payment", description: "Lorem ipsum dolor sit amet." },
-    { id: 3, icon: AboutIcon1, title: "24/7 Support", description: "Lorem ipsum dolor sit amet." },
+    { id: 1, icon: AboutIcon1, title: "FAST Delivery", description: "We will provide you best services" },
+    { id: 2, icon: ProtectedIcon, title: "Secure Payment", description: "We will protect your information" },
+    { id: 3, icon: SupportIcon, title: "24/7 Support", description: "Friendly 24/7 customer support" },
   ];
 
   return (

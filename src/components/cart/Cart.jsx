@@ -24,20 +24,21 @@ const Cart = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch cart items from the API
-    getCartItems(authContext?.data?.authToken)
-      .then((res) => {
-        setLoading(false);
-        setProducts(res.data);
+ if(authContext?.data?.authToken){
+  getCartItems(authContext?.data?.authToken)
+  .then((res) => {
+    setLoading(false);
+    setProducts(res.data);
 
-        // Calculate the total price of items in the cart
-        const total = res.data.reduce((sum, product) => sum + (product.final_price || 0), 0);
-        setTotalPrice(total);
-      })
-      .catch((err) => {
-        setLoading(false);
-        handleApiError(err);
-      });
+    // Calculate the total price of items in the cart
+    const total = res.data.reduce((sum, product) => sum + (product.final_price || 0), 0);
+    setTotalPrice(total);
+  })
+  .catch((err) => {
+    setLoading(false);
+    handleApiError(err);
+  });
+ }
   }, [authContext?.data?.authToken,cartContext.products]); 
 
   return (
@@ -60,7 +61,7 @@ const Cart = () => {
         </div>
 
         <div className="text-muted mb-5">
-          Home / <span className="text-dark fw-medium">Cart</span>
+          <Link to="/">Home</Link> / <span className="text-dark fw-medium">Cart</span>
         </div>
 
         <div className="row gx-0 gx-sm-3">

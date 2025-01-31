@@ -16,7 +16,6 @@ import { AuthContext, CartContext, favoriteContext } from "../imports";
 import { toast } from "react-toastify";
 
  export const Header = ({activePage="home"}) => {
-  const navigate = useNavigate();
     const authContext = useContext(AuthContext);
       const { favProducts} = useContext(favoriteContext);
       const { products} = useContext(CartContext);
@@ -87,9 +86,9 @@ if(authContext.data.authToken){
                 isDropMenu={true}
                 Icon={AccountIcon}
                 dropMenuItems={[
-                  { label: "Manage My Account",link:"/account", Icon: <AccountIcon /> },
-                  { label: "My Order", Icon: <OrdersIcon /> },
-                  { label: "My Reviews", Icon: <RatingIcon /> },
+                  { label: "Manage My Account",link:"/account", Icon: <AccountIcon /> ,active :activePage==="account"  },
+                  { label: "My Order", Icon: <OrdersIcon />, active :activePage==="orders"},
+                  { label: "My Reviews", Icon: <RatingIcon /> ,active :activePage==="reviews"},
                   { label: "Logout", Icon: <LogoutIcon /> ,handleClick:handleLogout},
                 ]}
               /></>}
@@ -145,9 +144,9 @@ if(authContext.data.authToken){
                 isDropMenu={true}
                 Icon={AccountIcon}
                 dropMenuItems={[
-                  { label: "Manage My Account",link:"/account", Icon: <AccountIcon /> },
-                  { label: "My Order",  Icon: <OrdersIcon /> },
-                  { label: "My Reviews",  Icon: <RatingIcon /> },
+                  { label: "Manage My Account",link:"/account", Icon: <AccountIcon />,active :activePage==="account" },
+                  { label: "My Order",  Icon: <OrdersIcon /> ,active :activePage==="orders"},
+                  { label: "My Reviews",  Icon: <RatingIcon />,active :activePage==="reviews" },
                   { label: "Logout",  Icon: <LogoutIcon />, handleClick:handleLogout },
                 ]}
               />
@@ -169,9 +168,9 @@ if(authContext.data.authToken){
             Icon={AccountIcon}
             color="light"
             dropMenuItems={[
-              { label: "Manage My Account",link:"/account", Icon: <AccountIcon /> },
-              { label: "My Order",  Icon: <OrdersIcon /> },
-              { label: "My Reviews",  Icon: <RatingIcon /> },
+              { label: "Manage My Account",link:"/account", Icon: <AccountIcon />,active :activePage==="account" },
+              { label: "My Order",  Icon: <OrdersIcon />,active :activePage==="orders" },
+              { label: "My Reviews",  Icon: <RatingIcon />,active :activePage==="reviews" },
               { label: "Logout",  Icon: <LogoutIcon />,handleClick:handleLogout },
             ]}
           />

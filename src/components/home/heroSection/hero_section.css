@@ -43,7 +43,7 @@ height: clamp(300px,10vw,400px);
 .hero-slider-item {
 
   height: clamp(300px,10vw,400px);
-  background-color: rgb(0, 0, 0);
+  background-color: var(--banner-color);
 }
 .slider-right-img {
   height: 80%;

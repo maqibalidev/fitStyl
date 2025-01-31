@@ -4,8 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import "./category_section.css";
 import SkeletonComponent from '../../skeleton/Skeleton';
-import { getCategories } from '../../../services/userListingsApi';
-import { handleApiError } from '../../../helpers/errorHandler';
+import all_cat_img from "../../../assets/images/all_cat_img.png"
 import { Link } from 'react-router-dom';
 
 const CategoryItem = React.memo(({ title,icon }) => {
@@ -49,6 +48,11 @@ const CategorySection = ({data}) => {
     nextEl: ".category-sec-next",
   }}
 >
+<SwiperSlide>
+<Link to={`/products?cat=all`}>
+      <CategoryItem title="All" icon={all_cat_img} />
+      </Link>
+  </SwiperSlide>
   {data.map((category, index) => (
     <SwiperSlide key={index}>
       <Link to={`/products?cat=${category.id}`}>
@@ -60,7 +64,7 @@ const CategorySection = ({data}) => {
 :
 <SkeletonComponent count={6} height={120}/>
  }
-      <div className="d-flex d-sm-none custom-pagination justify-content-center my-3"></div>
+      <div className="d-flex custom-pagination justify-content-center my-3"></div>
     </div>
   );
 };

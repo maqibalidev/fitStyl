@@ -18,7 +18,7 @@ const ResetPass = lazy(() => import("../components/login/ResetPass"));
 const ProductDetails = lazy(() => import("../components/productDetails/ProductDetails"));
 const AccountPage = lazy(() => import("../components/accountPage/AccountPage"));
 const NotFoundPage = lazy(() => import("../components/NotFoundPage"));
-
+const PlaceOrder = lazy(() => import("../components/placeOrderPage/PlaceOrder"));
 export const Root = () => {
   const location = useLocation();
   const authContext = useContext(AuthContext);
@@ -31,37 +31,38 @@ export const Root = () => {
       behavior: "smooth",
     });
 
-  //   const checkAuth = () => {
-  //     const { authToken } = authContext?.data;
-  //     if (authToken) {
-  //       try {
-  //         // ////////////////// IF TOKEN FOUND ,CHECK FOR THE EXPIRY   ////////////////////
-  //         const token = jwtDecode(authToken);
-  //         if (Date.now() / 1000 < token.exp) {
-  //           if (
-  //             location.pathname === "/login" ||
-  //             location.pathname === "/register"
-  //           ) {
-  //             navigate("/");
-  //           }
-  //         } else {
-  //           // /////////////////// logout USER ON TOKEN EXPIRY  ///////////////////////////
-  //           authContext.dispatch({ type: "LOGOUT" });
-  //         }
-  //       } catch (error) {
-  //         console.error("Invalid token: ", error);
-  //         authContext.dispatch({ type: "LOGOUT" });
-  //       }
-  //     }
-  //     // /////////////////// NAVIGATE TO INDEX ROUTE IF  authToken IS undefined  ///////////////////////////
-  //     else if (
-  //       location.pathname !== "/login" &&
-  //       location.pathname !== "/register"
-  //     ) {
-  //       navigate("/login");
-  //     }
-  //   };
-  //   checkAuth();
+    const checkAuth = () => {
+      const { authToken } = authContext?.data;
+      if (authToken) {
+        try {
+          // ////////////////// IF TOKEN FOUND ,CHECK FOR THE EXPIRY   ////////////////////
+          const token = jwtDecode(authToken);
+          if (Date.now() / 1000 < token.exp) {
+            if (
+              location.pathname === "/login" ||
+              location.pathname === "/register"
+            ) {
+              navigate("/");
+            }
+          } else {
+            // /////////////////// logout USER ON TOKEN EXPIRY  ///////////////////////////
+            authContext.dispatch({ type: "LOGOUT" });
+          }
+        } catch (error) {
+          console.error("Invalid token: ", error);
+          authContext.dispatch({ type: "LOGOUT" });
+        }
+      }
+      // /////////////////// NAVIGATE TO INDEX ROUTE IF  authToken IS undefined  ///////////////////////////
+      else if (
+        location.pathname === "/cart" ||
+        location.pathname === "/favorites" ||
+         location.pathname === "/account"
+      ) {
+        navigate("/login");
+      }
+    };
+    checkAuth();
   //   // eslint-disable-next-line
    }, [authContext?.data, navigate, location]);
 
@@ -78,6 +79,7 @@ export const Root = () => {
         <Route path="/signup" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/favorites" element={<Favorites/>} />
+        <Route path="/place_order/:id?" element={<PlaceOrder/>} />
         <Route path="/products/:parameters?" element={<Products/>} />
         <Route path="/product?" element={<ProductDetails/>} />
         <Route path="/contact" element={<Contact/>} />

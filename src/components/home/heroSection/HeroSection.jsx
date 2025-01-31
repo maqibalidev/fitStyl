@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import "./hero_section.css"
 import { Link } from 'react-router-dom'
-import demoImg1 from '../../../assets/images/demo1.png' 
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { Pagination } from 'swiper/modules';
+import { Autoplay, Pagination } from 'swiper/modules';
 import { ArrowIcon } from '../../includes/imports';
 import SkeletonComponent from '../../skeleton/Skeleton';
 import Skeleton from 'react-loading-skeleton';
@@ -20,9 +19,14 @@ const HeroSection = ({data,categories}) => {
            {
             categories && categories.length > 0 ?
 
-             categories.map((item,index)=>(
-              <li key={index}><Link to={`/products?cat=${item.id}`}>{item.name}</Link></li>
-             ))
+           <>
+             <li><Link to={`/products?cat=all`}>All</Link></li>
+         {
+              categories.map((item,index)=>(
+                <li key={index}><Link to={`/products?cat=${item.id}`}>{item.name}</Link></li>
+               ))
+         }
+           </>
            : <Skeleton count={6} className='w-75'/>
             }
         </ul>
@@ -31,22 +35,36 @@ const HeroSection = ({data,categories}) => {
       </div>
       <div className="hero-sec-right col-12 col-md-9">
      {data && data.length > 0 ? <Swiper
-        modules={[Pagination]}
+        modules={[Pagination,Autoplay]}
         pagination={{ clickable: true }}
         spaceBetween={10}
         slidesPerView={1}
+        loop
+        autoplay= {
+          {delay: 2000,pauseOnMouseEnter:true}
+        }
 
       >
        {
         data.map((item,index)=>(
           <SwiperSlide key={index}>
           <div
-          className='hero-slider-item d-flex position-relative'
+          className='hero-slider-item d-flex position-relative '
+          style={{ backgroundColor: `${item?.bgColor ?  item.bgColor :"rgb(0, 0, 0)"}`,
+        
+        }}
+
           >
-           <div className="col-12 col-sm-6 item-left  d-flex flex-column justify-content-center gap-3 z-1">
-            <h6 className="small-heading text-light fw-lighter">{item?.heading || ""}</h6>
-            <h1 className="large-heading text-light ">{item.title}</h1>
-            <Link className='slider-btn text-light position-relative'>Shop Now <ArrowIcon/></Link>
+           <div className="col-12 col-sm-6 item-left  d-flex flex-column justify-content-center gap-3 z-1" >
+            <h6 className="small-heading  fw-lighter" 
+            style={{ color: `${item?.textColor ?  item.textColor :"rgb(255, 253, 253)"}`}}
+            >{item?.heading || ""}</h6>
+            <h1 className="large-heading"
+            style={{ color: `${item?.textColor ?  item.textColor :"rgb(255, 253, 253)"}`}}
+            >{item.title}</h1>
+            <Link className='slider-btn  position-relative'
+            style={{ color: `${item?.textColor ?  item.textColor :"rgb(255, 253, 253)"}`}}
+            >Shop Now <ArrowIcon/></Link>
            </div>
            <div className="col-12 col-sm-6 top-0 hero-sec-slider-img  z-0 h-100 position-absolute  d-flex item-right justify-content-end justify-content-sm-center align-items-center">
            <img className={`slider-right-img ${isLoadedImage ? "d-block" : "d-none"}`} src={item.image_url} alt="" onLoad={()=>setIsLoaded(true)}/>

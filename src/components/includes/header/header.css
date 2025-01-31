@@ -55,6 +55,8 @@ a{
     &:hover{
         background-color: orange;
     }
+
+
 }
  
     
@@ -97,4 +99,7 @@ a{
 .floating-search-active {
     display: flex;
     transform: scale(1);
+}
+.dropdown-active{
+    background-color: orange;
 }

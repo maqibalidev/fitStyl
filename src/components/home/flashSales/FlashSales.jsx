@@ -1,6 +1,6 @@
 import React, { memo, useContext, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { CustomHeader, CustomButton, Product, AuthContext } from "../../includes/imports";
 import SkeletonComponent from "../../skeleton/Skeleton";
 import { CartContext, favoriteContext } from "../../includes/imports"; // Ensure context imports
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { useAddCart } from "../../../hooks/useAddCart";
 import { useFavorites } from "../../../hooks/useAddFav";
 import { CONSTANTS } from "../../../constants/constansts";
+import { duration } from "moment";
 
 const FlashSales = ({ data }) => {
   const { products, addProduct } = useContext(CartContext);
@@ -50,7 +51,8 @@ return AddToCart(id);
       576: { slidesPerView: 3 },
       992: { slidesPerView: 4 },
     },
-    modules: [Navigation, Pagination],
+    autoplay:{delay: 2000,pauseOnMouseEnter:true},
+    modules: [Navigation, Pagination,Autoplay],
   };
 
   return (

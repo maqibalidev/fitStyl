@@ -23,7 +23,8 @@ const AccountPage = () => {
     verified: 0,
   });
   useEffect(() => {
-    getUser(data.authToken)
+    if(data?.authToken){
+      getUser(data.authToken)
       .then((res) => {
         formik.setValues({
           username: res.user?.username || "",
@@ -44,6 +45,7 @@ const AccountPage = () => {
       .catch((error) => {
         handleApiError(error);
       });
+    }
   }, []);
 
   const formik = useFormik({
@@ -66,7 +68,7 @@ const AccountPage = () => {
       confirmPass,
     }) => {
       setLoading(true);
-   matchValues !== true ? updateUser(
+   matchValues() !== true ? updateUser(
     {
       username,
       address,
@@ -91,7 +93,7 @@ const AccountPage = () => {
   });
 
   const matchValues = ()=>{
-    if(formik.values.username == values.username && formik.values.address==values.address){
+    if(formik.values.username == values.username && formik.values.address==values.address &&  values.currentPass.trim() === "" && values.password.trim() === "" ){
       return true
     }
     return false;
@@ -112,19 +114,20 @@ const AccountPage = () => {
       });
   };
 
+  
   return (
     <div className="d-flex flex-column justify-content-between vh-100">
       <Header activePage="account" />
 
       <div className="position-relative">
         {loading && <Loader />}
-        <div className="custom-container mx-auto p-5 my-5 ">
+        <div className="custom-container mx-auto p-2 p-sm-5 my-5 ">
           <form
             onSubmit={formik.handleSubmit}
             className="form d-flex flex-column gap-2"
           >
             <h5 className="fw-medium color-primary">Edit Your Profile</h5>
-            <div className="row ">
+            <div className="row gy-2">
               <div className="col-12 col-sm-6">
                 <div>
                   <span>Username</span>

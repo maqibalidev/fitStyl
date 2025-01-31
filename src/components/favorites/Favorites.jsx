@@ -24,12 +24,18 @@ const Favorites = () => {
   return (
     <div className='d-flex flex-column justify-content-between vh-100'>
       <Header activePage="favorites"/>
-<div className='custom-container mx-auto py-0 py-sm-5 row gx-0 gx-sm-4 gy-5 mt-0'>
- {
+<div className='custom-container  mx-auto py-0 py-sm-5 row gx-0 gx-sm-4 gy-5 mt-0'>
+       <div className="text-muted mt-3 d-flex align-items-center justify-content-between">
+          <span>
+          <Link to="/">Home</Link> / <span className="text-dark fw-medium">Favorites</span>
+          </span>
+            {
     favProducts && favProducts.length > 0 &&   <div>
     <button onClick={()=>clearFavorites()} className='px-3 py-2 bg-color-orange border-0 w-auto float-end rounded-1 text-light'>Clear Favorites</button>
     </div>
  }
+          </div>
+
 {favProducts && favProducts.length ? favProducts.map((item,index)=>(
     <div key={item.id} className='col-12 col-sm-4 col-lg-3'>
         <Product

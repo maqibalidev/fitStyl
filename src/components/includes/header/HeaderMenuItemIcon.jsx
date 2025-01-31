@@ -39,7 +39,7 @@ const HeaderMenuItemIcon = ({
     return dropMenuItems.map((item, key) => (
       <li  onClick={item.handleClick} key={key}>
         <Link
-          className={`dropdown-item ${item.active ? "active" : ""} d-flex align-items-center`}
+          className={`dropdown-item ${item.active ? "dropdown-active" : ""} d-flex align-items-center`}
           to={item?.link || "/"}
         >
           {item.Icon}

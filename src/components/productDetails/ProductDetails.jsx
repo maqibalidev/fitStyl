@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-
-import demo from "../../assets/images/Copa_Sense 1.png"
-import { AddIcon, ArrowLEFT, ArrowRight, FavoriteIcon, RatingIcon, SubtractIcon } from '../../assets/icons/icons'
+import { AddIcon, FavoriteIcon, RatingIcon, SubtractIcon } from '../../assets/icons/icons'
 import "./product_details.css";
+import CryptoJS from "crypto-js";
 import { Navigation, Pagination } from 'swiper/modules'
 import { SwiperSlide , Swiper } from 'swiper/react'
-import { productData } from '../../assets/data'
 import { Footer, Header, Image } from '../includes/imports';
 import { getFlashProducts } from '../../services/userListingsApi';
 import { handleApiError } from '../../helpers/errorHandler';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 const ProductDetails = () => {
+
   const {search} = useLocation();
+  const navigate = useNavigate()
     const [swiperInstance, setSwiperInstance] = useState(null);
     const [index,setIndex] = useState(0);
     const [colorIndex,setColorIndex] = useState(0);
@@ -64,9 +64,28 @@ const handleDecrement = () => {
 
   }
 };
+
+const handlePlaceOrder = () => {
+  const productInfo = {
+    id: product[0].id,
+    color: product[0].colors.split(",")[colorIndex],
+    size: product[0].size.split(",")[sizeIndex],
+    image_index:index,
+    quantity:quantity
+  };
+
+  const encrypted = CryptoJS.AES.encrypt(
+    JSON.stringify(productInfo),
+    process.env.REACT_APP_CRYPTOJS_SEC
+  ).toString();
+
+  console.log("Encrypted Data:", encrypted);
+  navigate(`/place_order?product=${encodeURIComponent(encrypted)}`);
+};
+
   return (
     <div>
-      <Header/>
+      <Header activePage='product_details'/>
 <div className="custom-container mx-auto row py-5">
  
   
@@ -197,8 +216,8 @@ const handleDecrement = () => {
  <input value={quantity} className='form-control rounded-0 text-center shadow-none' type="number" />
  <button onClick={handleIncrement} className='p-2 product-details-btn   rounded-1 rounded-start-0 '><AddIcon/></button>
  </div>
- <button className="center col-4 bg-color-orange border-0 rounded-1 text-light">
-Add to cart
+ <button onClick={handlePlaceOrder} className="center col-4 bg-color-orange border-0 rounded-1 text-light">
+Order Now
  </button>
 
 <div className='col-2'>

@@ -29,7 +29,10 @@ export {
   MailIcon,
   UpArrowIcon,
   SadEmoji,
-  HappyEmoji
+  HappyEmoji,
+  SupportIcon,
+  ProtectedIcon,
+  RightFaqArrow
 } from "../../assets/icons/icons";
 
 // Contexts

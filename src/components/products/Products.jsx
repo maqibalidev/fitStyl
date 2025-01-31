@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import React, { useContext, useEffect, useState, useCallback, useMemo } from "react";
 import { CartContext, CustomButton, CustomHeader, favoriteContext, Loader } from "../includes/imports";
 import "./products.css";
 import { Footer, Header, Product } from "../includes/imports";
@@ -11,12 +11,21 @@ import SpinnerLoader from "../includes/SpinnerLoader";
 import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
+// Debounce function to optimize filter changes
+const debounce = (func, delay) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), delay);
+  };
+};
+
 const Products = () => {
   const [offset, setOffset] = useState(0);
   const [filters, setFilters] = useState({ priority: null, catValue: null });
-  const [productsData, setProductsData] = useState(null);
+  const [productsData, setProductsData] = useState([]); 
   const [reachedEnd, setReachedEnd] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const [catData, setCatData] = useState([]);
   const [categoryHeading, setCategoryHeading] = useState("All Products");
   const navigate = useNavigate();
@@ -29,42 +38,37 @@ const Products = () => {
   const { AddToCart } = useAddCart(products, addProduct);
   const { FavoriteToggle } = useFavorites(favProducts, addFavProduct, removeFavProduct);
 
-  const handleAddToCart = (id) => {
-      return  AddToCart(id); 
-  
-  };
-  
+  const handleAddToCart = (id) => AddToCart(id);
+  const handleFavoriteToggle = (id, title, img, price, rating) => FavoriteToggle(id, title, img, price, rating);
 
-  const handleFavoriteToggle = (id, title, img, price, rating) => {
-    FavoriteToggle(id, title, img, price, rating);
-  };
-
-  // Fetch product categories
-  const getProductCategories = () => {
+  const getProductCategories = useCallback(() => {
     getCategories()
-      .then((res) => {
-        setCatData(res.data);
-      })
-      .catch((err) => {
-        handleApiError(err);
-      });
+      .then((res) => setCatData(res.data))
+      .catch(handleApiError);
+  }, []);
+
+  // Optimized to avoid unnecessary duplicate filtering
+  const updateProductData = (prevData, newData) => {
+    const combinedData = [...prevData, ...newData];
+    const uniqueData = Array.from(new Set(combinedData.map((product) => product.id)))
+      .map((id) => combinedData.find((product) => product.id === id));
+    return uniqueData;
   };
 
   // Fetch products API
   const fetchProducts = useCallback(() => {
-    // Prevent fetching if priority is null or undefined
     if (filters.priority === null) return;
 
     setLoading(true);
 
     if (offset === 0) {
-      setProductsData([]); // Reset products when offset is 0
+      setProductsData([]);
     }
-    console.log(offset)
-    getFlashProducts(offset, null, null, filters.priority, filters.catValue)
+const cat_value = filters.catValue === "all" ? null : filters.catValue
+    getFlashProducts(offset, null, null, filters.priority, cat_value)
       .then((res) => {
         if (res.data.length > 0) {
-          setProductsData((prev) => (offset === 0 ? res.data : [...prev, ...res.data]));
+          setProductsData((prev) => updateProductData(prev, res.data));
         } else {
           setReachedEnd(true);
         }
@@ -76,52 +80,47 @@ const Products = () => {
       });
   }, [filters, offset]);
 
-  // Handle category value change
-  const handleOptionClick = (cat_id) => {
-    setProductsData([]); // Reset products list on filter change
-    setReachedEnd(false);
-    setOffset(0); // Reset offset
-
-    if (cat_id === "all") {
-      setFilters((prev) => ({ ...prev, catValue: null, priority: -1 }));
-      setCategoryHeading("All Products");
-      navigate(`/products?cat=all`);
-    } else {
-      const selectedCategory = catData.find((cat) => cat.id === cat_id);
-      setFilters((prev) => ({ ...prev, catValue: cat_id, priority: -1 }));
-      setCategoryHeading(selectedCategory.name);
+  // Handle category change
+  const handleOptionClick = useCallback(
+    debounce((cat_id) => {
+      setProductsData([]);
+      setReachedEnd(false);
+      setOffset(0);
+      const selectedCategory = cat_id === "all" ? "All Products" : catData.find((cat) => cat.id === cat_id)?.name;
+      setFilters((prev) => ({
+        ...prev,
+        catValue: cat_id === "all" ? null : cat_id,
+        priority: -1,
+      }));
+      setCategoryHeading(selectedCategory || "All Products");
       navigate(`/products?cat=${cat_id}`);
-    }
-  };
+    }, 500),
+    [catData, navigate]
+  );
 
-const handleViewAllClick = ()=>{
-  setProductsData([]); // Reset products list on filter change
-  setReachedEnd(false);
-  setOffset(0); // Reset offset
-  navigate("/products?cat=all")
-}
-
-  // Handle query parameter for category
   useEffect(() => {
-    console.log(filters.priority)
+    getProductCategories();
+  }, [getProductCategories]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [filters, offset, fetchProducts]);
+
+  useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const categoryFromQuery = queryParams.get("cat");
 
     if (categoryFromQuery) {
-      if (categoryFromQuery === "all") {
-        setFilters((prev) => ({ ...prev, priority: -1, catValue: null }));
-        setCategoryHeading("All Products");
-      } else {
-        const selectedCategory = catData.find((cat) => cat.id === categoryFromQuery);
-        if (selectedCategory) {
-          setFilters((prev) => ({ ...prev, catValue: categoryFromQuery, priority: -1 }));
-          setCategoryHeading(selectedCategory.name);
-        }
-      }
+      const selectedCategory = categoryFromQuery === "all" ? "All Products" : catData.find((cat) => cat.id === categoryFromQuery)?.name;
+      setCategoryHeading(selectedCategory || "All Products");
+      setFilters((prev) => ({
+        ...prev,
+        catValue: categoryFromQuery === "all" ? "all" : categoryFromQuery,
+        priority: -1,
+      }));
     }
   }, [location.search, catData]);
 
-  // Set priority and category heading based on route parameters
   useEffect(() => {
     if (params.parameters === "flash_sales") {
       setFilters((prev) => ({ ...prev, priority: 1 }));
@@ -135,33 +134,35 @@ const handleViewAllClick = ()=>{
     }
   }, [params]);
 
-  // Fetch categories on mount
   useEffect(() => {
-    getProductCategories();
-  }, []);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading && !reachedEnd) {
+          setOffset((prev) => prev + 1);
+        }
+      },
+      { threshold: 1.0 }
+    );
+    const loadMoreElement = document.getElementById("loadMoreTrigger");
+    if (loadMoreElement) observer.observe(loadMoreElement);
 
-  // Fetch products whenever filters or offset changes
-  useEffect(() => {
-    setLoading(true)
-    fetchProducts();
-  }, [filters, offset, fetchProducts]);
-
-  const handleLoadMoreClick = () => {
-    setOffset((prev) => (prev + 1));
-  };
+    return () => {
+      if (loadMoreElement) observer.unobserve(loadMoreElement);
+    };
+  }, [loading, reachedEnd]);
 
   const handleSortClick = (sortValue) => {
-    let sortedData;
-    
-    const copiedData = [...productsData];
-  
-    if (sortValue === "desc") {
-      sortedData = copiedData.sort((a, b) => b.final_price - a.final_price);
-    } else {
-      sortedData = copiedData.sort((a, b) => a.final_price - b.final_price);
-    }
-  
+    const sortedData = [...productsData].sort((a, b) => 
+      sortValue === "desc" ? b.final_price - a.final_price : a.final_price - b.final_price
+    );
     setProductsData(sortedData);
+  };
+
+  const handleViewAllClick = () => {
+    setProductsData([]);
+    setReachedEnd(false);
+    setOffset(0);
+    navigate("/products?cat=all");
   };
 
   return (
@@ -170,31 +171,28 @@ const handleViewAllClick = ()=>{
 
       <div className="custom-container mx-auto">
         <div className="text-muted mt-5">
-          Home / <span className="text-dark fw-medium">Products</span>
+          <Link to="/">Home</Link> / <span className="text-dark fw-medium">Products</span>
         </div>
-        <div className="d-flex flex-column flex-sm-row  justify-content-between align-items-center">
+        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
           <CustomHeader smallHeading="Category" largeHeading={categoryHeading} />
 
           <div className="text-center body d-flex gap-3 my-2 my-sm-0">
-            {/* Category Filter */}
             <select
               name="cat-filter"
-              value={filters.catValue || "all"}
+              value={filters.catValue || "filter_cat"}
               onChange={(e) => handleOptionClick(e.target.value)}
               className="form-select shadow-none form-select-md product-view-select-filter"
-              aria-label=".form-select-lg example"
             >
+                <option disabled value="filter_cat">Filter Category</option>
               <option value="all">All</option>
-              {catData &&
-                catData.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
+              {catData.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
             </select>
 
-            {/* Price Filter */}
-            <select onChange={(e) => handleSortClick(e.target.value)} className="form-select product-view-select-filter shadow-none form-select-md" aria-label=".form-select-lg example">
+            <select onChange={(e) => handleSortClick(e.target.value)} className="form-select product-view-select-filter shadow-none form-select-md">
               <option selected disabled>
                 Filter Price
               </option>
@@ -203,11 +201,9 @@ const handleViewAllClick = ()=>{
             </select>
           </div>
         </div>
-     
-        <div className="row my-4 ">
-          {/* Products Grid */}
-          
-            {productsData && productsData.length > 0  ? (
+
+        <div className="row my-4">
+          {productsData && productsData.length > 0 ? (
             productsData.map((item, key) => (
               <div className="col-12 col-sm-4 col-lg-3" key={key}>
                 <Product
@@ -227,39 +223,27 @@ const handleViewAllClick = ()=>{
               </div>
             ))
           ) : (
-           <>
-           {!loading ? <div className="d-flex justify-content-center my-5 flex-column align-items-center gap-4">
-            <h4 className="text-center">No Products available for this category!</h4>
-            <div
-              onClick={handleViewAllClick}
-              className="btn btn-transparent border rounded-2 col-12 col-sm-5 p-3 border-1 border-dark my-2"
-            >
-              View All Products
+            <div className="justify-content-center flex-column align-items-center">
+              {!loading ? (
+                <div className="d-flex justify-content-center my-5 flex-column align-items-center gap-4">
+                  <h4 className="text-center">No Products available for this category!</h4>
+                  <div
+                    onClick={handleViewAllClick}
+                    className="btn btn-transparent border rounded-2 col-12 col-sm-5 p-3 border-1 border-dark my-2"
+                  >
+                    View All Products
+                  </div>
+                </div>
+              ) : (
+                <SkeletonComponent count={4} showTiles={true} height={150} />
+              )}
             </div>
-          </div>:
-          <div className="d-flex justify-content-center w-100 row mx-auto">
-          <SkeletonComponent count={4} showTiles={true} height={150} />
-        </div>
-          }
-           </>
           )}
         </div>
 
-        {/* Load More Button */}
-        {!reachedEnd && (
-          <div className="d-flex justify-content-center my-5">
-            {!loading ? (
-              <button
-                onClick={handleLoadMoreClick}
-                className="px-4 py-2 bg-color-orange text-light border-0 rounded-1"
-              >
-                Show More
-              </button>
-            ) : (
-              <SpinnerLoader />
-            )}
-          </div>
-        )}
+        <div id="loadMoreTrigger" className="d-flex justify-content-center my-5">
+          {loading && <SpinnerLoader />}
+        </div>
       </div>
 
       <Footer />

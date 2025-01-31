@@ -82,7 +82,7 @@ const Login = () => {
 
   return (
     <div>
-      <Header />
+      <Header activePage="login"/>
       <div className="row vh-100 gx-0 position-relative">
         {isLoading && <Loader />}
         <div className="col-6 d-none d-sm-flex login-left vh-100 align-items-center">
