@@ -1,19 +1,17 @@
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { addCartItems } from "../services/userListingsApi";
-import { handleApiError } from "../helpers/errorHandler";
 import { toast } from "react-toastify";
 
 export const useAddCart = (products, addProduct) => {
   const authContext = useContext(AuthContext);
 
-  const AddToCart = (id, quantity = 1) => {
+  const AddToCart = (id, quantity = 1,img_id=null,size=null) => {
     if (authContext?.data?.authToken) {
     
       if (products.length < 9) {
         const exist = products.find((product) => product.id === id);
         if (!exist) {
-          addProduct(id);
+          addProduct(id,quantity,img_id,size);
         }
       } else {
         toast.info("Cart is full!",{position:"top-center"});
@@ -24,6 +22,7 @@ export const useAddCart = (products, addProduct) => {
       return Promise.reject("User not logged in");
     }
   };
+
 
   return { AddToCart };
 };

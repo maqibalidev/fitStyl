@@ -15,11 +15,13 @@ const NewArrival = ({data}) => {
    {data && data.length === 4 &&    <div className="new-arrival-container d-flex flex-column mt-5 flex-md-row">
         
         <NewArrivalItem
+        product_id={data[0].product_id}
           img={data[0].image_url}
           desc={data[0].banner_desc}
         />
         <div className="d-flex flex-column right">
           <NewArrivalItem
+                  product_id={data[0].product_id}
                  img={data[1].image_url}
                  desc={data[1].banner_desc}
             showImageRight={true}
@@ -27,11 +29,13 @@ const NewArrival = ({data}) => {
           />
           <div className="d-flex right flex-column flex-sm-row">
             <NewArrivalItem
+                    product_id={data[0].product_id}
                  img={data[2].image_url}
                  desc={data[2].banner_desc}
               isBottomItem={true}
             />
             <NewArrivalItem
+                    product_id={data[0].product_id}
                  img={data[3].image_url}
                  desc={data[3].banner_desc}
               isBottomItem={true}

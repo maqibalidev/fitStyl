@@ -19,13 +19,16 @@ useEffect(()=>{
 
  const { AddToCart } = useAddCart(products, addProduct); 
   const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
-  const handleAddToCart = (id) => {
-  return  AddToCart(id);
-  };
 
-  const handleFavoriteToggle = (id, title, img, price, rating) => {
-    FavoriteToggle(id, title, img, price, rating)
-  };
+
+  const handleAddToCart = (id,img_id,size) => {
+    return AddToCart(id,1,img_id,size);  
+      };
+
+      const handleFavoriteToggle = (id, title, img, price, rating,size) => {
+        FavoriteToggle(id, title, img, price, rating,size)
+      
+      };
 
   
 
@@ -46,6 +49,7 @@ useEffect(()=>{
               price={item.final_price}
               rating={item.rating}
               loadingState={loadingState}
+              size={item.size.split(",")[0]}
               offSale={item.off_sale}
               title={item.name}
               exist={

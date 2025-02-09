@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { AddIcon, FavoriteIcon, RatingIcon, SubtractIcon } from '../../assets/icons/icons'
+import React, { useContext, useEffect, useState } from 'react'
+import { AddIcon, CartIcon, FavoriteIcon, RatingIcon, SubtractIcon } from '../../assets/icons/icons'
 import "./product_details.css";
 import CryptoJS from "crypto-js";
 import { Navigation, Pagination } from 'swiper/modules'
 import { SwiperSlide , Swiper } from 'swiper/react'
-import { Footer, Header, Image } from '../includes/imports';
+import { CartContext, CustomButton, CustomHeader, favoriteContext, Footer, Header, Image, Product } from '../includes/imports';
 import { getFlashProducts } from '../../services/userListingsApi';
 import { handleApiError } from '../../helpers/errorHandler';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
+import { useAddCart } from '../../hooks/useAddCart';
+import { useFavorites } from '../../hooks/useAddFav';
+
+import SpinnerLoader from '../includes/SpinnerLoader';
 const ProductDetails = () => {
 
   const {search} = useLocation();
   const navigate = useNavigate()
     const [swiperInstance, setSwiperInstance] = useState(null);
     const [index,setIndex] = useState(0);
-    const [colorIndex,setColorIndex] = useState(0);
+const [relativeProducts,setRelativeProducts] = useState([]);
     const [sizeIndex,setSizeIndex] = useState(0);
     const [image,setImage] = useState("")
 const [product,setProduct] = useState([]);
@@ -23,16 +27,28 @@ const [originalPrice,setOriginalPrice] = useState(0);
 const [rating,setRating] = useState(0);
 const [remainingRatingStars,setRemainingRatingStars] = useState(0);
 const [quantity,setQuantity] = useState(1);
+const [AddCartLoading,setAddCartLoading] = useState(false);
+
 useEffect(() => {
-  // Fetch the product data
+
   getFlashProducts(null, null, search.split("=")[1])
     .then((res) => {
       const fetchedProduct = res.data;
       setOriginalPrice(Math.floor(fetchedProduct[0].final_price / (1 -  fetchedProduct[0].off_sale / 100)))
   setRating((Math.ceil(fetchedProduct[0].rating/20)))
  setRemainingRatingStars(5 - (Math.ceil(fetchedProduct[0].rating/20)));
- console.log(remainingRatingStars)
       setProduct(fetchedProduct);
+      console.log(fetchedProduct)
+      
+
+getFlashProducts(null,8,null,null,fetchedProduct[0]?.category_id).then((res)=>{
+
+setRelativeProducts(res.data)
+}).catch((error)=>{
+      handleApiError(error);
+})
+
+
       if (fetchedProduct.length > 0) {
         setImage(fetchedProduct[0].images[index] || "");
       }
@@ -42,6 +58,25 @@ useEffect(() => {
     });
 }, [search]);
 
+  const { products, addProduct } = useContext(CartContext);
+    const { favProducts, addFavProduct, removeFavProduct } =useContext(favoriteContext);
+  const [loadingState,setLoadingState] = useState(false)
+
+useEffect(()=>{
+  setLoadingState(false)
+},[products])
+
+
+  const { AddToCart} = useAddCart(products, addProduct); 
+  
+   const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
+   const handleAddToCart = (id,img_id,size=null) => {
+    return AddToCart(id,quantity,img_id,size);
+    
+      };
+   const handleFavoriteToggle = (id, title, img, price, rating) => {
+     FavoriteToggle(id, title, img, price, rating)
+   };
 
   
 
@@ -68,7 +103,6 @@ const handleDecrement = () => {
 const handlePlaceOrder = () => {
   const productInfo = {
     id: product[0].id,
-    color: product[0].colors.split(",")[colorIndex],
     size: product[0].size.split(",")[sizeIndex],
     image_index:index,
     quantity:quantity
@@ -83,17 +117,31 @@ const handlePlaceOrder = () => {
   navigate(`/place_order?product=${encodeURIComponent(encrypted)}`);
 };
 
+const handleAddToCartProduct =async()=>{
+ if(!products.find((cartProduct)=>cartProduct === product[0].id)){
+
+  await handleAddToCart(product[0].id,product[0].images[index].id,product[0].size.split(",")[sizeIndex])
+
+ }else{
+  navigate("/cart");
+ }
+}
+
   return (
     <div>
       <Header activePage='product_details'/>
 <div className="custom-container mx-auto row py-5">
  
   
-  <div className={`${product[0]?.images?.length > 1 ? "product-detail-left-bottom-padding": null} product-detail-left  col-12 col-md-7 bg-color-lightgrey d-flex align-items-center justify-content-center position-relative`}>
+  <div className={`${product[0]?.images?.length > 1 ? "product-detail-left-bottom-padding": null} product-detail-left   col-12 col-md-7 bg-color-lightgrey d-flex align-items-center justify-content-center position-relative`}>
+
 {
 
   product && product.length > 0 && <>
-          <Image url={image} />
+ {product[0].off_sale > 0 &&  <span class="wdp-ribbon d-flex align-items-center wdp-ribbon-two justify-content-center text-light">-{product[0].off_sale}%</span>}
+
+          <Image url={image.img_url} />
+      
           {
   product[0]?.images?.length > 1 ?
 <div className="product-images-bottom position-absolute bottom-0 start-0 end-0 mx-auto d-flex">
@@ -136,7 +184,7 @@ const handlePlaceOrder = () => {
   index === key ? "product-details-img-item-selected" : ""
   }`}
   >
-  <Image url={item}/>
+  <Image url={item.img_url}/>
   </div>
   </SwiperSlide>
   ))}
@@ -190,8 +238,8 @@ const handlePlaceOrder = () => {
  
  <div className='d-flex gap-2'>
  {
- product[0].colors.split(",").map((item,key)=>(
-<div key={key} onClick={()=>setColorIndex(key)} style={{"--product-color":item}} className={`product-color-btn  p-2 rounded-circle ${colorIndex===key && 'product-color-btn-active'}`}></div>    )
+ product[0]?.images.map((item,key)=>(
+<div key={key} onClick={() => handleSmallImgClick(key)} style={{"--product-color":item?.color}} className={`product-color-btn  p-2 rounded-circle ${index===key && 'product-color-btn-active'}`}></div>    )
 )
 }
 
@@ -211,20 +259,21 @@ const handlePlaceOrder = () => {
 </div>
 
 <div className="d-flex row justify-content-between gx-3 mt-4">
- <div className="left d-flex col-5">
+ <div className="left d-flex col-8">
  <button onClick={handleDecrement} className='p-2 product-details-btn  rounded-1 rounded-end-0'><SubtractIcon/></button>
  <input value={quantity} className='form-control rounded-0 text-center shadow-none' type="number" />
  <button onClick={handleIncrement} className='p-2 product-details-btn   rounded-1 rounded-start-0 '><AddIcon/></button>
  </div>
- <button onClick={handlePlaceOrder} className="center col-4 bg-color-orange border-0 rounded-1 text-light">
+
+
+<div className='col-4 d-flex gap-3'>
+<button onClick={()=>handleFavoriteToggle(product[0].id,product[0].name,product[0].images[index],product[0].final_price,product[0].rating)} className={`product-details-btn product-details-fav-icon shadow-sm d-flex align-items-center justify-content-center   rounded-1 ${!!favProducts.find((favProduct) => {return favProduct.id === product[0].id}) && "product-detail-fav-active" }`}><FavoriteIcon/></button>
+<button onClick={handleAddToCartProduct} className={`product-details-btn product-details-fav-icon shadow-sm d-flex align-items-center justify-content-center   rounded-1 ${!!products.find((cartProduct)=>{return cartProduct === product[0].id}) && "product-detail-fav-active" }`}>{AddCartLoading ? <div className="cart-spinner"> </div>  : <CartIcon/> }</button>
+</div>
+</div>
+<button onClick={handlePlaceOrder} className="center py-2 mt-4 w-100 bg-color-orange border-0 rounded-1 text-light">
 Order Now
  </button>
-
-<div className='col-2'>
-<button className='product-details-btn product-details-fav-icon shadow-sm p-2  rounded-1'><FavoriteIcon/></button>
-</div>
-</div>
-
  </div>
 
 :
@@ -238,7 +287,45 @@ Order Now
 </div>  
 
 }
+
+
+<div className=''>
+      <CustomHeader smallHeading="Related Products"  />
+      
+      <div className='product-container row gx-0 gx-sm-4 gy-5 mt-0'>
+        {relativeProducts && relativeProducts.length > 0 && relativeProducts.map((item) => (
+          <div key={item.id} className='col-12 col-sm-4 col-lg-3'>
+         <Product
+                    id={item.id}
+                    img={item.images[0]}
+                    price={item.final_price}
+                    rating={item.rating}
+                    offSale={item.off_sale}
+                    title={item.name}
+                    loadingState={loadingState}
+                    isNew={true}
+                    exist={
+                      !!favProducts.find((product) => product.id === item.id)
+                    }
+                    existInCart = {!!products.find((product)=>product === item.id)}
+                    onAddToCart={handleAddToCart}
+                    onToggleFavorite={handleFavoriteToggle}
+             
+                  />
+          </div>
+        ))}
+      </div>
+              
+   {relativeProducts && relativeProducts.length > 0 &&    <div className='d-flex justify-content-center mt-5'>
+        <CustomButton text="View All Products"  link={`/products?cat=${relativeProducts[0]?.category_id}`} />
+      </div>}
+    </div>
 </div>
+
+
+
+
+
       <Footer/>
     </div>
   )

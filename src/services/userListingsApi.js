@@ -100,6 +100,9 @@ export const updateCartItems = async (values,token) => {
 export const removeCartItems = async (values,token) => {
   return await API.post("cart/remove", values, {headers: authHeader(token, false)});
 };
+export const clearProductCart = async (token) => {
+  return await API.post("cart/clear",{}, {headers: authHeader(token, false)});
+};
 // export const logoutApi = async(token) => {
 //   return API.post(
 //     "logout",

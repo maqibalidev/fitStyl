@@ -6,6 +6,7 @@ import "./place-order.css"
 import CryptoJS from "crypto-js";
 import { getCartItems, getFlashProducts } from '../../services/userListingsApi'
 import { handleApiError } from '../../helpers/errorHandler'
+import Skeleton from 'react-loading-skeleton'
 const PlaceOrder = () => {
 
     const [paymentMethod,setPaymentMethod] = useState(0);
@@ -23,20 +24,23 @@ const PlaceOrder = () => {
 
         const queryParams = new URLSearchParams(location.search);
         const id = queryParams.get("product"); 
-        const decrypted = CryptoJS.AES.decrypt(
-            decodeURIComponent(id),
-            process.env.REACT_APP_CRYPTOJS_SEC
-          ).toString(CryptoJS.enc.Utf8);
-    
-          if (!decrypted) throw new Error("Decryption resulted in an empty string.");
-    
-          const parsedData = JSON.parse(decrypted);
-          console.log("Parsed Data:", parsedData);
+  
 
    if(id){
+
+    const decrypted = CryptoJS.AES.decrypt(
+      decodeURIComponent(id),
+      process.env.REACT_APP_CRYPTOJS_SEC
+    ).toString(CryptoJS.enc.Utf8);
+
+    if (!decrypted) throw new Error("Decryption resulted in an empty string.");
+
+    const parsedData = JSON.parse(decrypted);
+    console.log("Parsed Data:", parsedData);
+
 getFlashProducts(null,null,parsedData.id).then((res)=>{
     setLoading(false);
-    setProducts([{img_url:res?.data[0].images[parsedData.image_index],name:res.data[0].name,final_price:res.data[0].final_price,color:parsedData.color,size:parsedData.size,quantity:parsedData.quantity}]);
+    setProducts([{img_url:res?.data[0].images[parsedData.image_index].img_url,name:res.data[0].name,final_price:res.data[0].final_price,color:res.data[0].images[parsedData.image_index].color,size:parsedData.size,quantity:parsedData.quantity}]);
 
     const total = res.data.reduce((sum, product) => sum + (product.final_price || 0 ), 0);
     setTotalPrice(total);
@@ -50,9 +54,10 @@ getFlashProducts(null,null,parsedData.id).then((res)=>{
         getCartItems(authContext?.data?.authToken)
         .then((res) => {
           setLoading(false);
+          
           setProducts(res.data);
-      console.log(products)
-          const total = res.data.reduce((sum, product) => sum + (product.final_price || 0), 0);
+      console.log(res.data)
+          const total = res.data.reduce((sum, productSum) => sum + ((productSum.final_price || 0)*productSum.quantity), 0);
           setTotalPrice(total);
         })
         .catch((err) => {
@@ -104,7 +109,7 @@ setPaymentMethod(index)
             </div>
             <div className="col-12 col-md-6 px-0 px-md-4">
 <div className='d-flex flex-column gap-3 place-order-items-container p-2'>
-{products.map((item,index)=>(
+{ !loading ? products.map((item,index)=>(
     <div className="place_order-item d-flex align-items-center gap-3 shadow-sm px-3 py-2 rounded-2">
     <img src={item.img_url} height={80} width={80} />
    <div className='flex-grow-1'>
@@ -122,7 +127,10 @@ setPaymentMethod(index)
 <span><span className='fw-semibold'>Subtotal:</span>  Rs.{item.final_price*item.quantity}</span>
 </div>
 </div>
-))}
+)) : <>
+  
+  <Skeleton height={80} count={3} />
+  </>}
 </div>
 
 <div className='w-100 px-2'>

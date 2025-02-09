@@ -38,8 +38,16 @@ const Products = () => {
   const { AddToCart } = useAddCart(products, addProduct);
   const { FavoriteToggle } = useFavorites(favProducts, addFavProduct, removeFavProduct);
 
-  const handleAddToCart = (id) => AddToCart(id);
-  const handleFavoriteToggle = (id, title, img, price, rating) => FavoriteToggle(id, title, img, price, rating);
+
+  const handleAddToCart = (id,img_id,size) => {
+    return AddToCart(id,1,img_id,size);
+    
+      };
+    
+      const handleFavoriteToggle = (id, title, img, price, rating,size) => {
+        FavoriteToggle(id, title, img, price, rating,size)
+      
+      };
 
   const getProductCategories = useCallback(() => {
     getCategories()
@@ -213,6 +221,7 @@ const cat_value = filters.catValue === "all" ? null : filters.catValue
                   rating={item.rating}
                   offSale={item.off_sale}
                   title={item.name}
+                  size={item.size.split(",")[0]}
                   loadingState={loadingState}
                   isNew={true}
                   exist={!!favProducts.find((product) => product.id === item.id)}

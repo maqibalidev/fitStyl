@@ -64,7 +64,7 @@ const HeroSection = ({data,categories}) => {
             >{item.title}</h1>
             <Link className='slider-btn  position-relative'
             style={{ color: `${item?.textColor ?  item.textColor :"rgb(255, 253, 253)"}`}}
-            >Shop Now <ArrowIcon/></Link>
+            to={`/product?id=${item.product_id}`} >Shop Now <ArrowIcon/></Link>
            </div>
            <div className="col-12 col-sm-6 top-0 hero-sec-slider-img  z-0 h-100 position-absolute  d-flex item-right justify-content-end justify-content-sm-center align-items-center">
            <img className={`slider-right-img ${isLoadedImage ? "d-block" : "d-none"}`} src={item.image_url} alt="" onLoad={()=>setIsLoaded(true)}/>

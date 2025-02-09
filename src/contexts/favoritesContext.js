@@ -30,8 +30,8 @@ export const FavoriteProvider = ({ children }) => {
 );
 
 
-  const addFavProduct = (id,title,image,price,rating) =>
-    dispatch({ type: "ADD_PRODUCT", payload: { id,title,image,price,rating} });
+  const addFavProduct = (id,title,image,price,rating,size=null) =>
+    dispatch({ type: "ADD_PRODUCT", payload: { id,title,image,price,rating,size} });
   const removeFavProduct = (id) =>
     dispatch({ type: "REMOVE_PRODUCT", payload: { id } });
   const clearFavorites = () => dispatch({ type: "CLEAR_CART" });

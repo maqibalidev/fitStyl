@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import {
   addCartItems,
+  clearProductCart,
   getCartItems,
   removeCartItems,
+  updateCartItems,
 } from "../services/userListingsApi";
 import { AuthContext } from "./AuthContext";
 import { handleApiError } from "../helpers/errorHandler";
@@ -20,7 +22,7 @@ const cartReducer = (state, action) => {
 
     case "REMOVE_PRODUCT":
       return state.filter((productId) => productId !== action.payload.id);
-
+  
     case "CLEAR_CART":
       return [];
 
@@ -43,19 +45,19 @@ const loaderReducer = (state, action) => {
   }
 };
 
-// Context Creation
+
 export const CartContext = createContext();
 
-// Provider Component
-export const CartProvider = ({ children }) => {
-  const { data } = useContext(AuthContext); // Fetch auth context
 
-  const [cartState, cartDispatch] = useReducer(cartReducer, []); // Initial cart state as empty array
+export const CartProvider = ({ children }) => {
+  const { data } = useContext(AuthContext); 
+
+  const [cartState, cartDispatch] = useReducer(cartReducer, []);
   const [loaderState, loaderDispatch] = useReducer(loaderReducer, {
     isLoading: false,
   });
 
-  // Load Initial Cart Data
+
   useEffect(() => {
     if (!data?.authToken) return;
 
@@ -80,10 +82,10 @@ export const CartProvider = ({ children }) => {
   }, [data?.authToken]);
 
   // Action Creators
-  const addProduct = async (id, quantity) => {
-    loaderDispatch({ type: "SHOW_LOADER" }); // Show loader
+  const addProduct = async (id, quantity,img_id=null,size) => {
+    loaderDispatch({ type: "SHOW_LOADER" });
     try {
-      await addCartItems({ product_id: id, quantity }, data.authToken);
+      await addCartItems({ product_id: id, quantity,img_id ,size}, data.authToken);
       cartDispatch({ type: "ADD_PRODUCT", payload: { id, quantity } });
       toast.success("Product added to cart!", { position: "top-center" });
     } catch (err) {
@@ -103,12 +105,40 @@ export const CartProvider = ({ children }) => {
       console.error("Remove product error: ", err);
       handleApiError(err);
     } finally {
-      loaderDispatch({ type: "HIDE_LOADER" }); // Hide loader
+      loaderDispatch({ type: "HIDE_LOADER" });
+      return true;
     }
   };
 
-  const clearCart = () => {
-    cartDispatch({ type: "CLEAR_CART" });
+  const updateProduct = async (product_id, quantity) => {
+   const parsedQuantity = parseInt(quantity);
+    loaderDispatch({ type: "SHOW_LOADER" }); 
+    try {
+      await updateCartItems({ product_id,quantity:parsedQuantity}, data.authToken);
+      cartDispatch({ type: "UPDATE_PRODUCT", payload: { id:product_id, quantity } });
+      toast.success("Product updated!", { position: "top-center" });
+    } catch (err) {
+      console.error("error updating product: ", err);
+      handleApiError(err);
+    } finally {
+      loaderDispatch({ type: "HIDE_LOADER" });
+      return true;
+    }
+  };
+
+
+  const clearCart = async() => {
+    try {
+      await clearProductCart(data.authToken);
+      cartDispatch({ type: "CLEAR_CART" });
+    } catch (err) {
+      console.error("error clearing cart: ", err);
+      handleApiError(err);
+    } finally {
+      loaderDispatch({ type: "HIDE_LOADER" });
+      return true;
+    }
+    
   };
 
   return (
@@ -118,6 +148,7 @@ export const CartProvider = ({ children }) => {
         addProduct,
         removeProduct,
         clearCart,
+        updateProduct,
         isLoading: loaderState.isLoading,
       }}
     >

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./cart.css";
 import {
   AuthContext,
@@ -8,14 +8,18 @@ import {
   favoriteContext,
   Footer,
   Header,
+  Loader,
 } from "../includes/imports";
 import { getCartItems } from "../../services/userListingsApi";
 import { handleApiError } from "../../helpers/errorHandler";
 import SkeletonComponent from "../skeleton/Skeleton";
+import Swal from "sweetalert2";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   const cartContext = useContext(CartContext);
+  const [clearCartLoading,setClearCartLoading] = useState(false);
   const favContext = useContext(favoriteContext);
   const { favProducts } = useContext(favoriteContext);
 
@@ -31,7 +35,7 @@ const Cart = () => {
     setProducts(res.data);
 
     // Calculate the total price of items in the cart
-    const total = res.data.reduce((sum, product) => sum + (product.final_price || 0), 0);
+    const total = res.data.reduce((sum, product) => sum + ((product.final_price || 0)* product.quantity), 0);
     setTotalPrice(total);
   })
   .catch((err) => {
@@ -41,18 +45,39 @@ const Cart = () => {
  }
   }, [authContext?.data?.authToken,cartContext.products]); 
 
+
+const handleClearCart = ()=>{
+
+  Swal.fire({
+    title: "Are you sure?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, Clear it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      setClearCartLoading(true);
+      cartContext.clearCart().then(()=>{
+        setClearCartLoading(false)
+      });
+      setTotalPrice(0);
+    }
+  });
+
+
+}
+
   return (
     <div className="d-flex flex-column justify-content-between vh-100">
       <Header activePage="cart" />
+      {clearCartLoading && <Loader/>}
       <div className="cart-container custom-container mx-auto my-5">
+        
         <div>
           {products && products.length > 0 && (
             <button
-              onClick={() => {
-                cartContext.clearCart();
-                setProducts([]);
-                setTotalPrice(0);
-              }}
+              onClick={handleClearCart}
               className="px-3 py-2 bg-color-orange border-0 w-auto float-end rounded-1 text-light"
             >
               Clear Cart
@@ -109,6 +134,7 @@ const Cart = () => {
               <span className="fw-medium">Total:</span> <span>${totalPrice + 175}</span>
             </div>
             <button
+            onClick={()=>navigate("/place_order")}
               disabled={totalPrice <= 0}
               className={`w-100 mt-4 ${
                 totalPrice > 0

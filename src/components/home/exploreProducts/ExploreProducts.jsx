@@ -17,13 +17,16 @@ useEffect(()=>{
   const { AddToCart} = useAddCart(products, addProduct); 
   
    const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
-   const handleAddToCart = (id) => {
-   return  AddToCart(id);
-   };
- 
-   const handleFavoriteToggle = (id, title, img, price, rating) => {
-     FavoriteToggle(id, title, img, price, rating)
-   };
+
+   const handleAddToCart = (id,img_id,size) => {
+    return AddToCart(id,1,img_id,size);
+    
+      };
+
+  const handleFavoriteToggle = (id, title, img, price, rating,size) => {
+    FavoriteToggle(id, title, img, price, rating,size)
+  
+  };
 
   return (
     <div className='custom-container mx-auto'>
@@ -40,6 +43,7 @@ useEffect(()=>{
                     offSale={item.off_sale}
                     title={item.name}
                     loadingState={loadingState}
+                    size={item.size.split(",")[0]}
                     isNew={true}
                     exist={
                       !!favProducts.find((product) => product.id === item.id)

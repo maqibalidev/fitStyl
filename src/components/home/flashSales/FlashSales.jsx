@@ -24,13 +24,13 @@ useEffect(()=>{
 },[products])
 
 
-  const handleAddToCart = (id) => {
-return AddToCart(id);
+  const handleAddToCart = (id,img_id,size) => {
+return AddToCart(id,1,img_id,size);
 
   };
 
-  const handleFavoriteToggle = (id, title, img, price, rating) => {
-    FavoriteToggle(id, title, img, price, rating)
+  const handleFavoriteToggle = (id, title, img, price, rating,size) => {
+    FavoriteToggle(id, title, img, price, rating,size)
   
   };
 
@@ -75,6 +75,7 @@ return AddToCart(id);
                   offSale={item.off_sale}
                   price={item.final_price}
                   rating={item.rating}
+                  size={item.size.split(",")[0]}
                   title={item.name}
                   loadingState={loadingState}
                   exist={

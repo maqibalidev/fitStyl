@@ -11,12 +11,16 @@ const Favorites = () => {
      console.log(favProducts)
  const { AddToCart } = useAddCart(products, addProduct); 
   const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
-  const handleAddToCart = (id) => {
-    AddToCart(id);
-  };
 
-  const handleFavoriteToggle = (id, title, img, price, rating) => {
-    FavoriteToggle(id, title, img, price, rating)
+  const handleAddToCart = (id,img_id,size) => {
+    return AddToCart(id,1,img_id,size);
+    
+      };
+
+    
+
+  const handleFavoriteToggle = (id, title, img, price, rating,size) => {
+    FavoriteToggle(id, title, img, price, rating,size)
   };
 
 
@@ -44,6 +48,7 @@ const Favorites = () => {
                 price={item.price}
                 rating={item.rating}
                 title={item.name}
+                size={item.size}
                 exist={
                   !!favProducts.find((product) => product.id === item.id)
                 }

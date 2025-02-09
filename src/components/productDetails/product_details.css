@@ -10,7 +10,7 @@
 .product-detail-left img{
   cursor: pointer;
   width: 100%;
-    height: clamp(200px,30vw,300px);
+    height: clamp(300px,30vw,450px);
     object-fit: contain;
 }
 .product-details-img-item{
@@ -20,6 +20,7 @@ transition: all .2s ease;
 border: 1px solid transparent;
 
 img{
+    
     transition: all .5s ease;
     object-fit: contain;
     width: 90%;
@@ -76,3 +77,66 @@ height: 60vh;
 .product-detail-left-bottom-padding{
     padding-bottom: 120px;
 }
+
+.product-detail-fav-active{
+    background-color: var(--primary-color);
+    color: white;
+}
+.product-details-fav-icon{
+    width: 40px;
+    height: 40px;
+}
+
+
+/* common */
+.ribbon {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    position: absolute;
+    
+  }
+  .ribbon::before,
+  .ribbon::after {
+    position: absolute;
+    z-index: -1;
+    content: '';
+    display: block;
+    border: 3px solid  var(--primary-color);
+  }
+  .ribbon span {
+    position: absolute;
+    display: block;
+    width: 165px;
+    padding: 5px 0;
+    background-color: #1eb5ff;
+    box-shadow: 0 5px 10px rgba(0,0,0,.1);
+  }
+  
+
+  
+  .wdp-ribbon{
+      padding: 2px;
+      position: absolute;
+      right: 0px;
+      width: 60px;
+      top: 10px;
+      height:40px;
+      background-color:  var(--primary-color);
+  }
+  
+  .wdp-ribbon-two:before, .wdp-ribbon-two:before {
+
+      content: "";
+      position: absolute;
+      left: -14px;
+      top: 0;
+      border: 9px solid transparent;
+      border-width: 20px 8px;
+      border-right-color: var(--primary-color);
+  }
+  .wdp-ribbon-two:before {
+      border-color: var(--primary-color);
+      border-left-color: transparent;
+      left: -14px;
+  }

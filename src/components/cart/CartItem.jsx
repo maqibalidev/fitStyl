@@ -1,41 +1,48 @@
 import React, { useState, memo, useContext, useEffect } from "react";
-import { AddIcon, AuthContext, CartContext, EyeIcon, favoriteContext, FavoriteIcon, Loader, SubtractIcon } from "../includes/imports";
-import Swal from "sweetalert2";
+import { AddIcon, CartContext, EyeIcon, favoriteContext, FavoriteIcon, SubtractIcon } from "../includes/imports";
 import "../product/product.css";
+import "./cart.css"
 import { useFavorites } from "../../hooks/useAddFav";
-import { removeCartItems } from "../../services/userListingsApi";
-import { handleApiError } from "../../helpers/errorHandler";
 import SpinnerLoader from "../includes/SpinnerLoader";
 import { Link } from "react-router-dom";
-export const CartItem = memo(({ data, availability_status = 0, cartContext,existFavorites }) => {
+export const CartItem = memo(({ data, availability_status = 0,existFavorites }) => {
   const [quantity, setQuantity] = useState(parseInt(data?.quantity) || 1);
 const [loading,setLoading] = useState(false)
-const {isLoading,products} = useContext(CartContext);
+const {products,updateProduct,removeProduct} = useContext(CartContext);
   const { favProducts, addFavProduct, removeFavProduct } =useContext(favoriteContext);
   const { FavoriteToggle } = useFavorites(favProducts,addFavProduct, removeFavProduct); 
+const [updateProductLoading,setUpdateProductLoading] = useState(false);
   const handleChange = (quantity) => {
-    cartContext.updateProduct(data.id, quantity);
+    setUpdateProductLoading(true);
+    setQuantity(quantity)
+  updateProduct(data?.product_id, quantity).then(()=>{
+    setUpdateProductLoading(false)
+  })
+
   };
 
  const handleFavClick = ()=>{
 if(data ){
-  FavoriteToggle(data.product_id, data.name, data.img_url, data.final_price, data.rating)
+  FavoriteToggle(data.product_id, data.name, {img_url:data.img_url}, data.final_price, data.rating)
 }
  } 
 
-useEffect(()=>{
-  setLoading(isLoading)
-},[products])
 
   const handleDelete = () => {
+
+    
     setLoading(true)
- cartContext.removeProduct(data.product_id);
+ removeProduct(data.product_id).then(()=>{
+  setLoading(false)
+ });
 
   };
 
   const handleIncrement = () => {
+  if(quantity < 11){
     setQuantity((prev) => prev + 1);
     handleChange(quantity + 1);
+  }
   };
 
   const handleDecrement = () => {
@@ -92,32 +99,43 @@ useEffect(()=>{
       <div className="item-body py-3 ">
   
         <span className="title d-block mb-1 fw-medium">{data?.name || ""}</span>
-        <span className="prices color-primary fw-medium d-flex justify-content-between align-items-center">
+       <div className="d-flex justify-content-between">
+       <span className="prices color-primary fw-medium d-flex justify-content-between align-items-center">
           ${data?.final_price || 0}
         </span>
+        <div className="d-flex gap-4 align-items-center px-3">
+        <div className="cart-item-color rounded-circle" style={{"--cart-item-color":data?.color}}></div>
+          <span>{data?.size || ""}</span>
+
+        </div>
+       </div>
 
         <div className={`quantity-sec d-flex my-2 ${availability_status === 3 && "d-none"}`}>
           <div className="d-flex gap-1">
             <button
-              className="bg-color-dark-light-grey border-0 rounded-1 lh-0 p-2 text-dark"
-              onClick={handleIncrement}
+              className=" product-details-btn   rounded-1"
+              onClick={handleDecrement}
               aria-label="Increase quantity"
+              disabled={updateProductLoading}
             >
-              <AddIcon />
+              <SubtractIcon />
             </button>
             <input
-              className="form-control shadow-none text-center"
+              className="form-control shadow-none  text-center"
               value={quantity}
+              readOnly
               type="number"
               min={1}
+              max={data?.max_items || 10}
               aria-label="Quantity"
             />
             <button
-              className="bg-color-dark-light-grey border-0 rounded-1 lh-0 p-2 text-dark"
-              onClick={handleDecrement}
+              className=" product-details-btn   rounded-1 "
+              onClick={handleIncrement}
               aria-label="Decrease quantity"
+              disabled={updateProductLoading}
             >
-              <SubtractIcon />
+              <AddIcon />
             </button>
           </div>
           <span className="prices color-primary fw-medium d-flex justify-content-between align-items-center gap-2">

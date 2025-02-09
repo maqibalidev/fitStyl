@@ -17,7 +17,7 @@ const BannerAdd = ({data}) => {
    <h1 className="large-heading text-light mt-4">{data[0].title}</h1>
    <p className='desc mt-3'>{data[0].banner_desc}</p>
   </div>
-  <CustomButton text="Buy Now!" isGreen={true}/>
+  <CustomButton link={`/product?id=${data[0].product_id}`} text="Buy Now!" isGreen={true}/>
  </div>
  <div className="right position-relative col-12 banner-add-img col-sm-6 col-md-7 d-flex z-0 justify-content-end align-items-center position-absolute bottom-0 top-0 my-auto">
    <img className={`w-100 object-fit-contain  ${isLoadedImage ? "d-block" : "d-none"}`}  src={data[0].image_url} alt="" onLoad={()=>setIsLoaded(true)} />

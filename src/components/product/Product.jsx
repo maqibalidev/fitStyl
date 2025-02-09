@@ -26,6 +26,7 @@ export const Product = memo(
     isFavProduct = false,
     existInCart= false,
     onAddToCart,
+    size=null,
     onToggleFavorite,
 
   }) => {
@@ -57,10 +58,9 @@ const handleCartIconClick = async (e) => {
   if (existCart) {
     navigate("/cart");
   } else {
-    setLoading(true); 
     try {
       setLoading(true);
-      await onAddToCart(id); 
+      await onAddToCart(id,img.id,size); 
      
     } catch (error) {
       setLoading(false); // Hide the spinner regardless of success or failure
@@ -79,7 +79,7 @@ const handleProductClick = (e)=>{
 
 const handleFavoriteClick = (e)=>{
   e.stopPropagation();
-  onToggleFavorite(id,title,img,price,rating)
+  onToggleFavorite(id,title,img,price,rating,size)
 }
 
 
@@ -119,7 +119,7 @@ const handleFavoriteClick = (e)=>{
         </button>
       </span>
         <div className="item-top p-2 rounded-1 overflow-hidden bg-color-lightgrey d-flex justify-content-center align-items-center position-relative">
-          <Image url={img} />
+          <Image url={img?.img_url || img} />
           {/* {existInCart ?
           <button
           onClick={()=>navigate("/cart")}
